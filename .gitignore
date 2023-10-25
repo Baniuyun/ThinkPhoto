@@ -17,6 +17,7 @@
 *.swp
 *.DS_Store
 Thumbs.db
+.idea
 
 # 忽略构建产物和输出
 /bin

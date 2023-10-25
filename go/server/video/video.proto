@@ -18,7 +18,7 @@ service VideoService {
   rpc UpdateCommentCount(UpdateCommentCountReq) returns (UpdateCommentCountRsp);
 }
 
-message GetPublishTokenRequest{
+message GetPublishTokenRequest {
   string accessKey=1;
   string secretKey=2;
   string bucket=3;
@@ -27,10 +27,10 @@ message GetPublishTokenRequest{
   string CallbackBodyType=6;
 }
 
-message GetPublishTokenResponse{
+message GetPublishTokenResponse {
   string token=1;
 }
-message GetPublishVideoListRequest{
+message GetPublishVideoListRequest {
   int64 user_id=1;
   string user_token=2;
 }
@@ -40,12 +40,12 @@ message GetPublishVideoListResponse {
 }
 
 //七牛云发送
-message PublishVideoRequest{
+message PublishVideoRequest {
   string  CallbackBody =1 ; //
 }
 
 //发送给七牛云，由七牛云返回给web端
-message PublishVideoResponse{
+message PublishVideoResponse {
   VideoInfo info =1;
 }
 
@@ -84,7 +84,8 @@ message UpdateCommentCountRsp {
 message VideoInfo {
   int64 video_id = 1;
   int64 author_id = 2;
-  string url = 3; // 视频播放地址
+  string play_url = 3; // 视频播放地址
+  string cover_url = 4; // 封面图片地址
   int64 favorite_count = 5; // 点赞数
   int64 comment_count = 6; // 评论数
   bool is_favorite = 7; // 是否点赞
