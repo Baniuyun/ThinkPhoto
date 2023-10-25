@@ -91,6 +91,7 @@ message VideoInfo {
   string title = 8; //视频标题
   string information = 9;//视频简介
   int32  tag =10;   //视频标签
+  int64  time =11;  //时间戳
 }
 
 //通用回复
