@@ -26,6 +26,9 @@ func NewGetPublishVideoListLogic(ctx context.Context, svcCtx *svc.ServiceContext
 // 获取用户上传视频列表
 func (l *GetPublishVideoListLogic) GetPublishVideoList(in *pb.GetPublishVideoListRequest) (*pb.GetPublishVideoListResponse, error) {
 	// todo: add your logic here and delete this line
-
+	one, err := l.svcCtx.TVideoModel.FindOne(context.Background(), in.UserId)
+	if err != nil {
+		return nil, err
+	}
 	return &pb.GetPublishVideoListResponse{}, nil
 }
