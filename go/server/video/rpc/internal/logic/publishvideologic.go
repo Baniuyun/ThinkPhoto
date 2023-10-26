@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-
 	"rpc/internal/svc"
 	"rpc/pb"
 
@@ -26,6 +25,5 @@ func NewPublishVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Publ
 // 上传视频
 func (l *PublishVideoLogic) PublishVideo(in *pb.PublishVideoRequest) (*pb.PublishVideoResponse, error) {
 	// todo: add your logic here and delete this line
-
 	return &pb.PublishVideoResponse{}, nil
 }

@@ -1,5 +1,12 @@
 syntax = "v1"
 
+info(
+    title: "视频中心服务"
+    author: "Link"
+    email: "2243253448@qq.com"
+    version: "v1"
+)
+
 type GetVideoListReq {
     Id int64 `json:"id"`
 }
