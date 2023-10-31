@@ -1,0 +1,12 @@
+Name: zinc.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+    - 42.194.236.154:2379
+  Key: zinc.rpc
+
+ZincSearch:
+  UserName: admin
+  Password: pass4Zinc
+  addr:     http://42.194.236.154:4080
+  index:    TPvideo

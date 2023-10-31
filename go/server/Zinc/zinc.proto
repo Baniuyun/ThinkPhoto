@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package zinc;
+
+option go_package = "./zinc";
+
+message searchRequest {
+  string data=1;
+  string search_type=3;
+}
+
+message createDocRequest{
+  string data=1;
+}
+
+message deleteDocRequest{
+  string information=1;
+}
+
+message updateDocRequest{
+  string video_id=2;
+  doc data=1;
+}
+message Response {
+  string msg = 1;
+}
+
+message searchResponse{
+  repeated index searchResp=1;
+}
+
+message index{
+  string id=5;
+  string video_id=1;
+  string information=2;
+  string user_name=3;
+  string user_id=4;
+}
+
+message doc{
+  string video_id=1;
+  string information=2;
+  string user_name=3;
+  string user_id=4;
+}
+service ZincSearch {
+  rpc Search(searchRequest) returns(searchResponse);
+  rpc Delete(deleteDocRequest) returns(Response);
+  rpc Update(updateDocRequest) returns(Response);
+  rpc Doc(doc)  returns(Response);
+}
