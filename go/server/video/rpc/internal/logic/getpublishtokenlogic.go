@@ -25,7 +25,6 @@ func NewGetPublishTokenLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 
 // 获取上传回调凭证
 func (l *GetPublishTokenLogic) GetPublishToken(in *pb.GetPublishTokenRequest) (*pb.GetPublishTokenResponse, error) {
-	// todo: add your logic here and delete this line
 	putPolicy := storage.PutPolicy{
 		Scope:            in.Bucket,
 		CallbackURL:      in.CallbackURL,

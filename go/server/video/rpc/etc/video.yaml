@@ -1,27 +1,18 @@
-svr_config:
-  name: "videosvr"
-  host: "42.194.236.154"
-  port: 8001
+Name: video.rpc
+ListenOn: 127.0.0.1:8001
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379
+  Key: video.rpc
+Mysql:
+  DataSource: root:root@tcp(127.0.0.1:3306)/think_photo?charset=utf8mb4&parseTime=True&loc=Local
 
-redis:
-  host: "42.194.236.154"
-  password: ""
-  db: 0
-  port: 6379
-  PoolSize: 10
 
-mysql:
-  host: "42.194.236.154"
-  port: "8086"
-  database: "ThinkPhoto"
-  username: "root"
-  password: "123456"
-
-qiniu:
-  addr: "http://s32fnznta.hd-bkt.clouddn.com/"
-  access_key_id: "chKutyE8kuwO6B9Tu8wn5JFvNSs_QsMJqWYsV1je"
-  secret_access_key: "AAV7tW4bdV4NKJfZFMYiiuwTZChWAp8pH1nPFpU7"
-  video_buckets: thinkphoto
-  video_path: "/root/video"
+Qiniu:
+  addr: "http://s380i9zlc.hn-bkt.clouddn.com"
+  access_key_id: "bJ-9DVru_E4frpbc8H6TWwEbVcf5L0cPREoUYRuX"
+  secret_access_key: "ROfCruRQdhJzhAnaNgNIP3CJ-yrD38g4pFiVLER3"
+  video_buckets: thinkphoto11
+  video_path: "/root/video/"
 
 

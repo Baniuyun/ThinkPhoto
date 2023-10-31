@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"fmt"
+	"rpc/internal/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"rpc/internal/svc"
@@ -24,6 +26,47 @@ func NewGetPublishVideoListLogic(ctx context.Context, svcCtx *svc.ServiceContext
 
 // 获取用户上传视频列表
 func (l *GetPublishVideoListLogic) GetPublishVideoList(in *pb.GetPublishVideoListRequest) (*pb.GetPublishVideoListResponse, error) {
-	// todo: add your logic here and delete this line
-	return &pb.GetPublishVideoListResponse{}, nil
+	userId := in.UserId
+	token := in.UserToken
+
+	// 验证 token
+	if token == "" {
+		return nil, nil
+	}
+
+	// 获取上传视频列表
+	tVideoList, err := l.svcCtx.TVideoModel.FindListById(context.Background(), userId)
+	if err != nil {
+		fmt.Println("FindList fail: ", err)
+		return nil, err
+	}
+
+	var videoList []*pb.VideoInfo
+	for i := 0; i < len(tVideoList); i++ {
+		videoInfo := ConvertToVideoInfo(tVideoList[i])
+		videoList[i] = videoInfo
+	}
+
+	return &pb.GetPublishVideoListResponse{VideoList: videoList}, nil
+}
+
+// 类型转换
+func ConvertToVideoInfo(tvideo *model.TVideo) *pb.VideoInfo {
+	return &pb.VideoInfo{
+		VideoId:       tvideo.Id,
+		AuthorId:      tvideo.AuthorId,
+		PlayUrl:       tvideo.PlayUrl,
+		CoverUrl:      tvideo.CoverUrl,
+		FavoriteCount: tvideo.FavoriteCount,
+		CommentCount:  tvideo.CommentCount,
+		IsFavorite:    int64ToBool(tvideo.IsFavorite),
+		Title:         tvideo.Title.String,
+		Information:   tvideo.Information,
+		Tag:           int32(tvideo.Tag),
+		Time:          tvideo.Time,
+	}
+}
+
+func int64ToBool(value int64) bool {
+	return value != 0
 }
