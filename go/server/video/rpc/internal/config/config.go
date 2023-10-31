@@ -5,15 +5,15 @@ import (
 )
 
 type Config struct {
-	DB struct {
-		Host         string
-		Port         string
-		Database     string
-		Username     string
-		Password     string
-		MaxOpenConns int `json:",default=10"`
-		MaxIdleConns int `json:",default=100"`
-		MaxLifetime  int `json:",default=3600"`
-	}
 	zrpc.RpcServerConf
+	Mysql struct {
+		DataSource string
+	}
+	Qiniu struct {
+		Addr            string
+		AccessKeyId     string
+		SecretAccessKey string
+		VideoBuckets    string
+		VideoPath       string
+	}
 }

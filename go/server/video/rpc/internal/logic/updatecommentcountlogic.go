@@ -25,7 +25,16 @@ func NewUpdateCommentCountLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 
 // 更新这个视频的评论数
 func (l *UpdateCommentCountLogic) UpdateCommentCount(in *pb.UpdateCommentCountReq) (*pb.UpdateCommentCountRsp, error) {
-	// todo: add your logic here and delete this line
+	videoId := in.VideoId
+	commentStatus := in.CommentStatus
 
-	return &pb.UpdateCommentCountRsp{}, nil
+	if commentStatus == 0 {
+		return nil, nil
+	}
+	_, err := l.svcCtx.TVideoModel.UpdateCommentCount(context.Background(), videoId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.UpdateCommentCountRsp{CommonRsp: &pb.CommonResponse{Code: 200, Msg: "update comment_count success"}}, nil
 }
