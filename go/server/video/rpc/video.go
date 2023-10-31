@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-
 	"rpc/internal/config"
 	"rpc/internal/server"
 	"rpc/internal/svc"
@@ -33,7 +32,6 @@ func main() {
 		}
 	})
 	defer s.Stop()
-
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }

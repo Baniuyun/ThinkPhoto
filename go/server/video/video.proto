@@ -89,7 +89,7 @@ message VideoInfo {
   int64 favorite_count = 5; // 点赞数
   int64 comment_count = 6; // 评论数
   bool is_favorite = 7; // 是否点赞
-  string title = 8; //视频标题
+  string author_name = 8;
   string information = 9;//视频简介
   int32  tag =10;   //视频标签
   int64  time =11;  //时间戳
