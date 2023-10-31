@@ -26,4 +26,4 @@ Thumbs.db
 /target
 
 # 忽略第三方库和依
-
+/node modules
