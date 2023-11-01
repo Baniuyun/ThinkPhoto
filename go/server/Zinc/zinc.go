@@ -1,14 +1,13 @@
 package main
 
 import (
+	"Thinkphoto/pkg/interceptor"
+	"Thinkphoto/server/Zinc/internal/config"
+	"Thinkphoto/server/Zinc/internal/server"
+	"Thinkphoto/server/Zinc/internal/svc"
+	"Thinkphoto/server/Zinc/pb/zinc"
 	"flag"
 	"fmt"
-
-	"Zinc/internal/config"
-	"Zinc/internal/server"
-	"Zinc/internal/svc"
-	"Zinc/pb/zinc"
-
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -16,13 +15,14 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/zinc.yaml", "the config file")
+var configFile = flag.String("f", "server/Zinc/etc/zinc.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-
+	//fmt.Println(os.Getwd())
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
+	//logx.DisableStat()
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
@@ -33,7 +33,7 @@ func main() {
 		}
 	})
 	defer s.Stop()
-
+	s.AddUnaryInterceptors(interceptor.ServerErrorInterceptor())
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }

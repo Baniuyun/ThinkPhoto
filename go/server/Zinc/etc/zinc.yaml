@@ -10,3 +10,10 @@ ZincSearch:
   Password: pass4Zinc
   addr:     http://42.194.236.154:4080
   index:    TPvideo
+
+Log:
+  ServiceName: Zinc
+  Mode : file
+  Path : log
+  Level : info
+

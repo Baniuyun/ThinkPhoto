@@ -1,14 +1,12 @@
 package logic
 
 import (
+	"Thinkphoto/server/video/rpc/internal/model"
+	"Thinkphoto/server/video/rpc/internal/svc"
+	"Thinkphoto/server/video/rpc/pb"
 	"context"
 	"database/sql"
 	"encoding/json"
-	"fmt"
-	"rpc/internal/model"
-	"rpc/internal/svc"
-	"rpc/pb"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -32,7 +30,7 @@ func (l *PublishVideoLogic) PublishVideo(in *pb.PublishVideoRequest) (*pb.Publis
 	// 解析请求体
 	var videoInfo pb.VideoInfo
 	if err := json.Unmarshal([]byte(in.CallbackBody), &videoInfo); err != nil {
-		fmt.Println("Failed to unmarshal JSON:", err)
+		logx.Errorf("Failed to unmarshal JSON: %v", err)
 		return nil, err
 	}
 
@@ -56,7 +54,7 @@ func (l *PublishVideoLogic) PublishVideo(in *pb.PublishVideoRequest) (*pb.Publis
 
 	res, err := l.svcCtx.TVideoModel.Insert(context.Background(), &tVideo)
 	if err != nil {
-		fmt.Println("insert fail: ", err)
+		logx.Errorf("insert fail: %v", err)
 		return nil, err
 	}
 

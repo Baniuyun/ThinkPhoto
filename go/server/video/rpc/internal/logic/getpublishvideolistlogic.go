@@ -1,13 +1,12 @@
 package logic
 
 import (
+	"Thinkphoto/server/video/rpc/code"
+	"Thinkphoto/server/video/rpc/internal/model"
+	"Thinkphoto/server/video/rpc/internal/svc"
+	"Thinkphoto/server/video/rpc/pb"
 	"context"
-	"fmt"
-	"rpc/internal/model"
-
 	"github.com/zeromicro/go-zero/core/logx"
-	"rpc/internal/svc"
-	"rpc/pb"
 )
 
 type GetPublishVideoListLogic struct {
@@ -27,17 +26,19 @@ func NewGetPublishVideoListLogic(ctx context.Context, svcCtx *svc.ServiceContext
 // 获取用户上传视频列表
 func (l *GetPublishVideoListLogic) GetPublishVideoList(in *pb.GetPublishVideoListRequest) (*pb.GetPublishVideoListResponse, error) {
 	userId := in.UserId
-	token := in.UserToken
-
-	// 验证 token
-	if token == "" {
-		return nil, nil
+	//token := in.UserToken
+	//
+	//// 验证 token
+	//if token == "" {
+	//	return nil, nil
+	//}
+	if in.UserId == 0 {
+		return nil, code.UserIdEmpty
 	}
-
 	// 获取上传视频列表
 	tVideoList, err := l.svcCtx.TVideoModel.FindListById(context.Background(), userId)
 	if err != nil {
-		fmt.Println("FindList fail: ", err)
+		logx.Errorf("FIndListById err:%v", err)
 		return nil, err
 	}
 

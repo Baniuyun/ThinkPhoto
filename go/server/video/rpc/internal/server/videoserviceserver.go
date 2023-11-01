@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"rpc/internal/logic"
-	"rpc/internal/svc"
-	"rpc/pb"
+	"Thinkphoto/server/video/rpc/internal/logic"
+	"Thinkphoto/server/video/rpc/internal/svc"
+	"Thinkphoto/server/video/rpc/pb"
 )
 
 type VideoServiceServer struct {

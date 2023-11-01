@@ -14,8 +14,8 @@ service VideoService {
   rpc GetVideoList(GetVideoListRequest) returns (GetVideoListResponse);
   // 更新这个视频的获赞数
   rpc UpdateFavoriteCount(UpdateFavoriteCountReq) returns (UpdateFavoriteCountRsp);
-  // 更新这个视频的评论数
-  rpc UpdateCommentCount(UpdateCommentCountReq) returns (UpdateCommentCountRsp);
+  // 更新这个视频的评论数 (拆分)
+  //rpc UpdateCommentCount(UpdateCommentCountReq) returns (UpdateCommentCountRsp);
 }
 
 message GetPublishTokenRequest {
@@ -32,7 +32,7 @@ message GetPublishTokenResponse {
 }
 message GetPublishVideoListRequest {
   int64 user_id=1;
-  string user_token=2;
+ // string user_token=2;(token由api自动验证)
 }
 
 message GetPublishVideoListResponse {
@@ -70,11 +70,11 @@ message UpdateFavoriteCountRsp {
   CommonResponse common_rsp = 1;
 }
 
-// 更新这个视频的评论数
-message UpdateCommentCountReq {
-  int64 video_id = 1;
-  int64 comment_status = 2;
-}
+//// 更新这个视频的评论数
+//message UpdateCommentCountReq {
+//  int64 video_id = 1;
+//  int64 comment_status = 2;
+//}
 
 message UpdateCommentCountRsp {
   CommonResponse common_rsp = 1;
@@ -88,7 +88,7 @@ message VideoInfo {
   string cover_url = 4; // 封面图片地址
   int64 favorite_count = 5; // 点赞数
   int64 comment_count = 6; // 评论数
-  bool is_favorite = 7; // 是否点赞
+  //bool is_favorite = 7; // 是否点赞
   string author_name = 8;
   string information = 9;//视频简介
   int32  tag =10;   //视频标签

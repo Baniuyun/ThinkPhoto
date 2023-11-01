@@ -4,9 +4,10 @@
 package zincsearch
 
 import (
+	"Thinkphoto/server/Zinc/pb/zinc"
 	"context"
 
-	"Zinc/pb/zinc"
+
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

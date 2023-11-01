@@ -1,12 +1,12 @@
 package logic
 
 import (
+	"Thinkphoto/server/video/rpc/internal/svc"
+	"Thinkphoto/server/video/rpc/pb"
 	"context"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
 	"github.com/zeromicro/go-zero/core/logx"
-	"rpc/internal/svc"
-	"rpc/pb"
 )
 
 type GetPublishTokenLogic struct {

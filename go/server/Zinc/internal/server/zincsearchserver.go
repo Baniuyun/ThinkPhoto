@@ -4,11 +4,12 @@
 package server
 
 import (
+	"Thinkphoto/server/Zinc/internal/logic"
+	"Thinkphoto/server/Zinc/internal/svc"
+	"Thinkphoto/server/Zinc/pb/zinc"
 	"context"
 
-	"Zinc/internal/logic"
-	"Zinc/internal/svc"
-	"Zinc/pb/zinc"
+
 )
 
 type ZincSearchServer struct {

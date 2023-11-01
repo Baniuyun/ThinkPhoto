@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package service;
+option go_package="./pb";
+
+service Follow {
+  // 关注
+  rpc Follow (FollowRequest) returns (FollowResponse);
+  // 取消关注
+  rpc UnFollow (UnFollowRequest) returns (UnFollowResponse);
+  // 是否关注
+  rpc IsFollow (IsFollowRequest) returns (IsFollowResponse);
+  // 关注列表
+  rpc FollowList (FollowListRequest) returns (FollowListResponse);
+  // 粉丝列表
+  rpc FansList (FansListRequest) returns (FansListResponse);
+  // 关注数
+  rpc FollowCount (FollowCountRequest) returns (CountResponse);
+  //粉丝数
+  rpc FansCount (FansCountRequest) returns (CountResponse);
+}
+
+message IsFollowRequest{
+  int64 follower_id = 1; // 关注者
+  int64 following_id = 2; // 被关注者
+}
+
+message IsFollowResponse{
+  bool res=1;
+}
+
+message FollowCountRequest{
+  int64 follower_id = 1;
+}
+
+message FansCountRequest{
+  int64 following_id=1;
+}
+
+message CountResponse{
+  int64 count=1;
+}
+
+message FollowRequest {
+  int64 follower_id = 1; // 关注者
+  int64 following_id = 2; // 被关注者
+}
+
+message FollowResponse {
+}
+
+message UnFollowRequest {
+  int64 follower_id = 1; // 取关者
+  int64 following_id = 2; // 被取消关注者
+}
+
+message UnFollowResponse {
+}
+
+message FollowListRequest {
+  int64 Id = 1;
+  int64 follower_id = 2;
+  int64 cursor = 3;    //游标(请求位置)
+  int64 pageSize = 4;  //请求大小
+}
+
+message FollowItem {
+  int64 Id = 1;
+  int64 follower_id = 2; // 被关注者
+  int64 fansCount = 3; // 粉丝数
+  int64 createTime = 4; // 关注时间
+}
+
+message FollowListResponse {
+  repeated FollowItem items = 1;
+  int64 cursor = 2;
+  bool isEnd = 3;
+  int64 Id = 4;
+}
+
+message FansListRequest {
+  int64 following_id = 1;
+  int64 cursor = 2;
+  int64 pageSize = 3;
+}
+
+message FansItem {
+  int64 following_id = 1;
+  int64 follower_id = 2;
+  int64 createTime = 3;
+}
+
+message FansListResponse {
+  repeated FansItem items = 1;
+  int64 cursor = 2;
+}
+
+//通用回复
+message CommonResponse {
+  int64 code = 1;
+  string msg = 2;
+}

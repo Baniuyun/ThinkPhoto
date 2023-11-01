@@ -1,12 +1,10 @@
 package logic
 
 import (
+	"Thinkphoto/server/video/rpc/internal/model"
+	"Thinkphoto/server/video/rpc/internal/svc"
+	"Thinkphoto/server/video/rpc/pb"
 	"context"
-	"fmt"
-	"rpc/internal/model"
-
-	"rpc/internal/svc"
-	"rpc/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -42,7 +40,7 @@ func (l *GetVideoListLogic) GetVideoList(in *pb.GetVideoListRequest) (*pb.GetVid
 		tVideoList, err = l.svcCtx.TVideoModel.FindListByTag(context.Background(), tag)
 	}
 	if err != nil {
-		fmt.Println("Get t_video fail: ", err)
+		logx.Errorf("tVideo Get err:%v", err)
 		return nil, err
 	}
 

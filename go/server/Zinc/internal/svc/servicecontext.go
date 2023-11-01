@@ -1,6 +1,8 @@
 package svc
 
-import "Zinc/internal/config"
+import (
+	"Thinkphoto/server/Zinc/internal/config"
+)
 
 type ServiceContext struct {
 	Config config.Config

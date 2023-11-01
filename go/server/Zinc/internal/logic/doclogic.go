@@ -1,15 +1,14 @@
 package logic
 
 import (
+	"Thinkphoto/server/Zinc/internal/svc"
+	"Thinkphoto/server/Zinc/pb/zinc"
 	"context"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"strings"
-
-	"Zinc/internal/svc"
-	"Zinc/pb/zinc"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -37,13 +36,15 @@ func (l *DocLogic) Doc(in *zinc.Doc) (*zinc.Response, error) {
 	url := fmt.Sprintf("%s/api/%s/_doc", l.svcCtx.Config.ZincSearch.Addr, l.svcCtx.Config.ZincSearch.Index)
 	req, err := http.NewRequest("POST", url, strings.NewReader(requestbody))
 	if err != nil {
-		log.Println(err)
+		logx.Errorf("zinc Doc  ConstructHttp err:%v", err)
+		return nil, err
 	}
 	req.SetBasicAuth(l.svcCtx.Config.ZincSearch.UserName, l.svcCtx.Config.ZincSearch.Password)
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Println(err)
+		logx.Errorf("zinc Doc HttpRequest err:%v", err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 	log.Println(resp.StatusCode)

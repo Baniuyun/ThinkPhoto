@@ -4,9 +4,10 @@
 package videoservice
 
 import (
+	"Thinkphoto/server/video/rpc/pb"
 	"context"
 
-	"rpc/pb"
+
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

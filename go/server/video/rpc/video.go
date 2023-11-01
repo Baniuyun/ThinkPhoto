@@ -1,12 +1,15 @@
 package main
 
 import (
+	"Thinkphoto/pkg/interceptor"
+	"Thinkphoto/server/video/rpc/internal/config"
+	"Thinkphoto/server/video/rpc/internal/server"
 	"flag"
 	"fmt"
-	"rpc/internal/config"
-	"rpc/internal/server"
-	"rpc/internal/svc"
-	"rpc/pb"
+	"github.com/zeromicro/go-zero/core/logx"
+
+	"Thinkphoto/server/video/rpc/internal/svc"
+	"Thinkphoto/server/video/rpc/pb"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -23,7 +26,7 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
-
+	logx.DisableStat()
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		pb.RegisterVideoServiceServer(grpcServer, server.NewVideoServiceServer(ctx))
 
@@ -31,6 +34,7 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 	})
+	s.AddUnaryInterceptors(interceptor.ServerErrorInterceptor())
 	defer s.Stop()
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()

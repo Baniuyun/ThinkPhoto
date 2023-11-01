@@ -1,9 +1,9 @@
 package svc
 
 import (
+	"Thinkphoto/server/video/rpc/internal/config"
+	"Thinkphoto/server/video/rpc/internal/model"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
-	"rpc/internal/config"
-	"rpc/internal/model"
 )
 
 type ServiceContext struct {

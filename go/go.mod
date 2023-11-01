@@ -1,8 +1,10 @@
-module rpc
+module Thinkphoto
 
 go 1.21.3
 
 require (
+	github.com/golang/protobuf v1.5.3
+	github.com/pkg/errors v0.9.1
 	github.com/qiniu/go-sdk/v7 v7.18.1
 	github.com/zeromicro/go-zero v1.5.6
 	google.golang.org/grpc v1.59.0
@@ -28,7 +30,6 @@ require (
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/mock v1.6.0 // indirect
-	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/gnostic v0.5.7-v3refs // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
