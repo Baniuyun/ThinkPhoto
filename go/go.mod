@@ -3,7 +3,9 @@ module Thinkphoto
 go 1.21.3
 
 require (
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/golang/protobuf v1.5.3
+	github.com/google/uuid v1.3.1
 	github.com/pkg/errors v0.9.1
 	github.com/qiniu/go-sdk/v7 v7.18.1
 	github.com/zeromicro/go-zero v1.5.6

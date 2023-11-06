@@ -1,0 +1,12 @@
+Name: user.rpc
+ListenOn: 0.0.0.0:8002
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: user.rpc
+Mysql:
+  DataSource: root:1234@tcp(127.0.0.1:3306)/think_photo?charset=utf8mb4&parseTime=True&loc=Local
+
+
+
+

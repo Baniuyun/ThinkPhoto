@@ -3,7 +3,7 @@ package logic
 import (
 	"Thinkphoto/server/video/rpc/internal/model"
 	"Thinkphoto/server/video/rpc/internal/svc"
-	"Thinkphoto/server/video/rpc/pb"
+	"Thinkphoto/server/video/rpc/pb/video"
 	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -24,11 +24,9 @@ func NewGetVideoListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetV
 }
 
 // 获取视频列表
-func (l *GetVideoListLogic) GetVideoList(in *pb.GetVideoListRequest) (*pb.GetVideoListResponse, error) {
-	//currentTime := in.CurrentTime
-	//tokenUserId := in.TokenUserId
+func (l *GetVideoListLogic) GetVideoList(in *video.GetVideoListRequest) (*video.GetVideoListResponse, error) {
+	// todo: add your logic here and delete this line
 	tag := in.Tag
-
 	var tVideoList []*model.TVideo
 	var err error
 
@@ -43,12 +41,9 @@ func (l *GetVideoListLogic) GetVideoList(in *pb.GetVideoListRequest) (*pb.GetVid
 		logx.Errorf("tVideo Get err:%v", err)
 		return nil, err
 	}
-
-	var videoList []*pb.VideoInfo
+	var videoList []*video.VideoInfo
 	for i := 0; i < len(tVideoList); i++ {
-		videoInfo := ConvertToVideoInfo(tVideoList[i])
-		videoList[i] = videoInfo
+		videoList = append(videoList, ConvertToVideoInfo(tVideoList[i], false))
 	}
-
-	return &pb.GetVideoListResponse{VideoList: videoList}, nil
+	return &video.GetVideoListResponse{VideoList: videoList}, nil
 }

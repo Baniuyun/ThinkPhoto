@@ -1,0 +1,37 @@
+Name: videoapi
+Host: 0.0.0.0
+Port: 8888
+
+Auth:
+  AccessSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  AccessExpire: 604800
+  RefreshSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  RefreshExpire: 2592000
+  RefreshAfter: 604800
+
+VideoRPC:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+      #- 42.194.236.154:2379
+    Key: video.rpc
+  #NonBlock: true
+
+SearchRPC:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+      #- 42.194.236.154:2379
+    Key: zinc.rpc
+  #NonBlock: true
+
+
+Qiniu:
+  Addr: "http://s32fnznta.hd-bkt.clouddn.com"
+  AccesskeyID: "chKutyE8kuwO6B9Tu8wn5JFvNSs_QsMJqWYsV1je"
+  SecretAccessKey: "ROfCruRQdhJzhAnaNgNIP3CJ-yrD38g4pFiVLER3"
+  VideoBuckets: thinkphoto
+  VideoPath: "/root/video/"
+
+Log:
+  Encoding: plain

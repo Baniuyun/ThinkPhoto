@@ -1,0 +1,29 @@
+Name: userapi
+Host: 0.0.0.0
+Port: 8888
+
+Auth:
+  AccessSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  AccessExpire: 604800
+  RefreshSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  RefreshExpire: 2592000
+  RefreshAfter: 604800
+
+FollowRPC:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+      #- 42.194.236.154:2379
+    Key: follow.rpc
+  #NonBlock: true
+
+UserRPC:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+      #- 42.194.236.154:2379
+    Key: user.rpc
+  #NonBlock: true
+
+Log:
+  Encoding: plain

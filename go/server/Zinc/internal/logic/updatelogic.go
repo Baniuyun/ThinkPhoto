@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -30,17 +31,17 @@ func NewUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateLogi
 func (l *UpdateLogic) Update(in *zinc.UpdateDocRequest) (*zinc.Response, error) {
 	// todo: add your logic here and delete this line
 	ls := &SearchLogic{l.ctx, l.svcCtx, l.Logger}
-	searchin := &zinc.SearchRequest{SearchType: "match", Data: in.VideoId}
+	searchin := &zinc.SearchRequest{SearchType: "match", Data: strconv.FormatInt(in.VideoId, 10)}
 	searchresp, err := ls.Search(searchin)
 	if err != nil {
 		return nil, err
 	}
 	id := searchresp.SearchResp[0].Id
 	url := fmt.Sprintf("%s/api/%s/_update/%s", l.svcCtx.Config.ZincSearch.Addr, l.svcCtx.Config.ZincSearch.Index, id)
-	requestbody := fmt.Sprintf(`{"video_id":"%s",
+	requestbody := fmt.Sprintf(`{"video_id":"%d",
 										"information":"%s",
 										"user_name":"%s",
-										"user_id":"%s"}`, in.Data.VideoId, in.Data.Information, in.Data.UserName, in.Data.UserId)
+										"user_id":"%d"}`, in.Data.VideoId, in.Data.Information, in.Data.UserName, in.Data.UserId)
 	req, err := http.NewRequest("POST", url, strings.NewReader(requestbody))
 	if err != nil {
 		logx.Errorf("zinc Update ConstructHttp err:%v", err)

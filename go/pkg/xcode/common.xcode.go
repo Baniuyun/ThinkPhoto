@@ -2,6 +2,7 @@ package xcode
 
 var (
 	OK                 = add(0, "OK")
+	NoLogin            = add(101, "NO_LOGIN")
 	RequestErr         = add(400, "INVALID_ARGUMENT")
 	Unauthorized       = add(401, "UNAUTHENTICATED")
 	AccessDenied       = add(403, "PERMISSION_DENIED")

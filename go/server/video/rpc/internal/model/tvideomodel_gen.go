@@ -37,12 +37,12 @@ type (
 	TVideo struct {
 		Id            int64          `db:"id"`             // 视频id，自增主键
 		AuthorId      int64          `db:"author_id"`      // 视频作者id
+		AuthorName    string         `db:"author_name"`    // 作者名字
 		PlayUrl       string         `db:"play_url"`       // 播放url
-		CoverUrl      string         `db:"cover_url"`      // 封面url
+		CoverUrl      sql.NullString `db:"cover_url"`      // 封面url
+		Avatar        string         `db:"avatar"`         // 头像地址
 		FavoriteCount int64          `db:"favorite_count"` // 视频的点赞数量
 		CommentCount  int64          `db:"comment_count"`  // 视频的评论数量
-		IsFavorite    int64          `db:"is_favorite"`    // 是否点赞
-		Title         sql.NullString `db:"title"`          // 视频标题
 		Information   string         `db:"information"`    // 视频简介
 		Tag           int64          `db:"tag"`            // 视频标签
 		Time          int64          `db:"time"`           // 时间戳
@@ -85,13 +85,13 @@ func (m *defaultTVideoModel) FindOne(ctx context.Context, id int64) (*TVideo, er
 
 func (m *defaultTVideoModel) Insert(ctx context.Context, data *TVideo) (sql.Result, error) {
 	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, tVideoRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.AuthorId, data.PlayUrl, data.CoverUrl, data.FavoriteCount, data.CommentCount, data.IsFavorite, data.Title, data.Information, data.Tag, data.Time)
+	ret, err := m.conn.ExecCtx(ctx, query, data.AuthorId, data.AuthorName, data.PlayUrl, data.CoverUrl, data.Avatar, data.FavoriteCount, data.CommentCount, data.Information, data.Tag, data.Time)
 	return ret, err
 }
 
 func (m *defaultTVideoModel) Update(ctx context.Context, data *TVideo) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, tVideoRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.AuthorId, data.PlayUrl, data.CoverUrl, data.FavoriteCount, data.CommentCount, data.IsFavorite, data.Title, data.Information, data.Tag, data.Time, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, data.AuthorId, data.AuthorName, data.PlayUrl, data.CoverUrl, data.Avatar, data.FavoriteCount, data.CommentCount, data.Information, data.Tag, data.Time, data.Id)
 	return err
 }
 

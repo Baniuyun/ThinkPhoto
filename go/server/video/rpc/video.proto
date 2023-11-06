@@ -1,21 +1,28 @@
 syntax = "proto3";
 
-package pb;
-option go_package="./pb";
+package video;
+option go_package="./video";
 
 service VideoService {
   // 获取上传回调凭证
   rpc GetPublishToken(GetPublishTokenRequest) returns(GetPublishTokenResponse);
   // 获取用户上传视频列表
   rpc GetPublishVideoList(GetPublishVideoListRequest) returns (GetPublishVideoListResponse);
+  //获取用户喜欢视频列表
+  rpc GetFavoriteVideoList(GetFavoriteVideoListRequest)returns(GetFavoriteVideoListResponse);
   // 上传视频
   rpc PublishVideo(PublishVideoRequest) returns (PublishVideoResponse);
+  // 删除视频
+  rpc DeleteVideo(DeleteVideoRequest) returns(DeleteVideoResponse);
   // 获取视频列表
   rpc GetVideoList(GetVideoListRequest) returns (GetVideoListResponse);
-  // 更新这个视频的获赞数
+  // 点赞并更新这个视频的获赞数
   rpc UpdateFavoriteCount(UpdateFavoriteCountReq) returns (UpdateFavoriteCountRsp);
+  // 根据视频id获取视频信息
+  rpc GetVideoInfoBYVideoId(GetVideoInfoReq) returns(GetVideoInfoResp);
   // 更新这个视频的评论数 (拆分)
   //rpc UpdateCommentCount(UpdateCommentCountReq) returns (UpdateCommentCountRsp);
+
 }
 
 message GetPublishTokenRequest {
@@ -28,7 +35,8 @@ message GetPublishTokenRequest {
 }
 
 message GetPublishTokenResponse {
-  string token=1;
+  string Token =1;
+
 }
 message GetPublishVideoListRequest {
   int64 user_id=1;
@@ -36,49 +44,78 @@ message GetPublishVideoListRequest {
 }
 
 message GetPublishVideoListResponse {
-  repeated VideoInfo video_list = 1; // 用户上传视频数组
+  repeated VideoSimple video_list = 1; // 用户上传视频数组
+}
+
+message GetFavoriteVideoListRequest{
+  int64 user_id=1;
+}
+
+message GetFavoriteVideoListResponse{
+  repeated VideoSimple video_list = 1;
 }
 
 //七牛云发送
 message PublishVideoRequest {
-  string  CallbackBody =1 ; //
+  string Information=1;
+  int64 Tag =2;
+  int64 UserId=3;
+  string Username=4;
+  string Avatar=5;
 }
 
-//发送给七牛云，由七牛云返回给web端
+//发送给api,api装填好后返回七牛云，由七牛云返回给web端
 message PublishVideoResponse {
   VideoInfo info =1;
 }
 
+message  DeleteVideoRequest {
+  int64 user_id=2;
+  int64  video_id =1;
+}
+
+message DeleteVideoResponse{
+  CommonResponse common=1;
+}
+
 message GetVideoListRequest {
-  int64 currentTime = 1;
-  int64 tokenUserId = 2;
+  int64 UserId = 2;
   int64 tag = 3;
 }
 
 message GetVideoListResponse {
   repeated VideoInfo video_list = 1;
-  int64 nextTime = 2;//下次推送时间
+  //int64 nextTime = 2;//下次推送时间
 }
 
 //更新点赞数
 message UpdateFavoriteCountReq {
+  int64 user_id =2;
   int64 video_id = 1;
-  int64 favorite_status = 2;
+  int64 status = 3;
 }
 
 message UpdateFavoriteCountRsp {
   CommonResponse common_rsp = 1;
 }
 
+message  GetVideoInfoReq{
+  int64 video_id=1;
+  int64 user_id=2;
+}
+
+message GetVideoInfoResp{
+  VideoInfo info=1;
+}
 //// 更新这个视频的评论数
 //message UpdateCommentCountReq {
 //  int64 video_id = 1;
 //  int64 comment_status = 2;
 //}
 
-message UpdateCommentCountRsp {
-  CommonResponse common_rsp = 1;
-}
+//message UpdateCommentCountRsp {
+//  CommonResponse common_rsp = 1;
+//}
 
 //视频信息
 message VideoInfo {
@@ -88,12 +125,23 @@ message VideoInfo {
   string cover_url = 4; // 封面图片地址
   int64 favorite_count = 5; // 点赞数
   int64 comment_count = 6; // 评论数
-  //bool is_favorite = 7; // 是否点赞
+  bool is_favorite = 7; // 是否点赞
   string author_name = 8;
   string information = 9;//视频简介
   int32  tag =10;   //视频标签
   int64  time =11;  //时间戳
+  string avatar=12; //头像
 }
+
+//简化视频信息
+message VideoSimple {
+  int64 video_id = 1;
+  string cover_url = 4; // 封面图片地址
+  int64 favorite_count = 5; // 点赞数
+  string information = 9;//视频简介
+  int64  time =11;  //时间戳
+}
+
 
 //通用回复
 message CommonResponse {

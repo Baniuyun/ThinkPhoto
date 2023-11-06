@@ -4,7 +4,7 @@
 // - protoc             v3.9.1
 // source: video.proto
 
-package pb
+package video
 
 import (
 	context "context"
@@ -19,12 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	VideoService_GetPublishToken_FullMethodName     = "/pb.VideoService/GetPublishToken"
-	VideoService_GetPublishVideoList_FullMethodName = "/pb.VideoService/GetPublishVideoList"
-	VideoService_PublishVideo_FullMethodName        = "/pb.VideoService/PublishVideo"
-	VideoService_GetVideoList_FullMethodName        = "/pb.VideoService/GetVideoList"
-	VideoService_UpdateFavoriteCount_FullMethodName = "/pb.VideoService/UpdateFavoriteCount"
-	VideoService_UpdateCommentCount_FullMethodName  = "/pb.VideoService/UpdateCommentCount"
+	VideoService_GetPublishToken_FullMethodName       = "/video.VideoService/GetPublishToken"
+	VideoService_GetPublishVideoList_FullMethodName   = "/video.VideoService/GetPublishVideoList"
+	VideoService_GetFavoriteVideoList_FullMethodName  = "/video.VideoService/GetFavoriteVideoList"
+	VideoService_PublishVideo_FullMethodName          = "/video.VideoService/PublishVideo"
+	VideoService_DeleteVideo_FullMethodName           = "/video.VideoService/DeleteVideo"
+	VideoService_GetVideoList_FullMethodName          = "/video.VideoService/GetVideoList"
+	VideoService_UpdateFavoriteCount_FullMethodName   = "/video.VideoService/UpdateFavoriteCount"
+	VideoService_GetVideoInfoBYVideoId_FullMethodName = "/video.VideoService/GetVideoInfoBYVideoId"
 )
 
 // VideoServiceClient is the client API for VideoService service.
@@ -35,14 +37,18 @@ type VideoServiceClient interface {
 	GetPublishToken(ctx context.Context, in *GetPublishTokenRequest, opts ...grpc.CallOption) (*GetPublishTokenResponse, error)
 	// 获取用户上传视频列表
 	GetPublishVideoList(ctx context.Context, in *GetPublishVideoListRequest, opts ...grpc.CallOption) (*GetPublishVideoListResponse, error)
+	// 获取用户喜欢视频列表
+	GetFavoriteVideoList(ctx context.Context, in *GetFavoriteVideoListRequest, opts ...grpc.CallOption) (*GetFavoriteVideoListResponse, error)
 	// 上传视频
 	PublishVideo(ctx context.Context, in *PublishVideoRequest, opts ...grpc.CallOption) (*PublishVideoResponse, error)
+	// 删除视频
+	DeleteVideo(ctx context.Context, in *DeleteVideoRequest, opts ...grpc.CallOption) (*DeleteVideoResponse, error)
 	// 获取视频列表
 	GetVideoList(ctx context.Context, in *GetVideoListRequest, opts ...grpc.CallOption) (*GetVideoListResponse, error)
-	// 更新这个视频的获赞数
+	// 点赞并更新这个视频的获赞数
 	UpdateFavoriteCount(ctx context.Context, in *UpdateFavoriteCountReq, opts ...grpc.CallOption) (*UpdateFavoriteCountRsp, error)
-	// 更新这个视频的评论数
-	UpdateCommentCount(ctx context.Context, in *UpdateCommentCountReq, opts ...grpc.CallOption) (*UpdateCommentCountRsp, error)
+	// 根据视频id获取视频信息
+	GetVideoInfoBYVideoId(ctx context.Context, in *GetVideoInfoReq, opts ...grpc.CallOption) (*GetVideoInfoResp, error)
 }
 
 type videoServiceClient struct {
@@ -71,9 +77,27 @@ func (c *videoServiceClient) GetPublishVideoList(ctx context.Context, in *GetPub
 	return out, nil
 }
 
+func (c *videoServiceClient) GetFavoriteVideoList(ctx context.Context, in *GetFavoriteVideoListRequest, opts ...grpc.CallOption) (*GetFavoriteVideoListResponse, error) {
+	out := new(GetFavoriteVideoListResponse)
+	err := c.cc.Invoke(ctx, VideoService_GetFavoriteVideoList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *videoServiceClient) PublishVideo(ctx context.Context, in *PublishVideoRequest, opts ...grpc.CallOption) (*PublishVideoResponse, error) {
 	out := new(PublishVideoResponse)
 	err := c.cc.Invoke(ctx, VideoService_PublishVideo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoServiceClient) DeleteVideo(ctx context.Context, in *DeleteVideoRequest, opts ...grpc.CallOption) (*DeleteVideoResponse, error) {
+	out := new(DeleteVideoResponse)
+	err := c.cc.Invoke(ctx, VideoService_DeleteVideo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -98,9 +122,9 @@ func (c *videoServiceClient) UpdateFavoriteCount(ctx context.Context, in *Update
 	return out, nil
 }
 
-func (c *videoServiceClient) UpdateCommentCount(ctx context.Context, in *UpdateCommentCountReq, opts ...grpc.CallOption) (*UpdateCommentCountRsp, error) {
-	out := new(UpdateCommentCountRsp)
-	err := c.cc.Invoke(ctx, VideoService_UpdateCommentCount_FullMethodName, in, out, opts...)
+func (c *videoServiceClient) GetVideoInfoBYVideoId(ctx context.Context, in *GetVideoInfoReq, opts ...grpc.CallOption) (*GetVideoInfoResp, error) {
+	out := new(GetVideoInfoResp)
+	err := c.cc.Invoke(ctx, VideoService_GetVideoInfoBYVideoId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -115,14 +139,18 @@ type VideoServiceServer interface {
 	GetPublishToken(context.Context, *GetPublishTokenRequest) (*GetPublishTokenResponse, error)
 	// 获取用户上传视频列表
 	GetPublishVideoList(context.Context, *GetPublishVideoListRequest) (*GetPublishVideoListResponse, error)
+	// 获取用户喜欢视频列表
+	GetFavoriteVideoList(context.Context, *GetFavoriteVideoListRequest) (*GetFavoriteVideoListResponse, error)
 	// 上传视频
 	PublishVideo(context.Context, *PublishVideoRequest) (*PublishVideoResponse, error)
+	// 删除视频
+	DeleteVideo(context.Context, *DeleteVideoRequest) (*DeleteVideoResponse, error)
 	// 获取视频列表
 	GetVideoList(context.Context, *GetVideoListRequest) (*GetVideoListResponse, error)
-	// 更新这个视频的获赞数
+	// 点赞并更新这个视频的获赞数
 	UpdateFavoriteCount(context.Context, *UpdateFavoriteCountReq) (*UpdateFavoriteCountRsp, error)
-	// 更新这个视频的评论数
-	UpdateCommentCount(context.Context, *UpdateCommentCountReq) (*UpdateCommentCountRsp, error)
+	// 根据视频id获取视频信息
+	GetVideoInfoBYVideoId(context.Context, *GetVideoInfoReq) (*GetVideoInfoResp, error)
 	mustEmbedUnimplementedVideoServiceServer()
 }
 
@@ -136,8 +164,14 @@ func (UnimplementedVideoServiceServer) GetPublishToken(context.Context, *GetPubl
 func (UnimplementedVideoServiceServer) GetPublishVideoList(context.Context, *GetPublishVideoListRequest) (*GetPublishVideoListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPublishVideoList not implemented")
 }
+func (UnimplementedVideoServiceServer) GetFavoriteVideoList(context.Context, *GetFavoriteVideoListRequest) (*GetFavoriteVideoListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFavoriteVideoList not implemented")
+}
 func (UnimplementedVideoServiceServer) PublishVideo(context.Context, *PublishVideoRequest) (*PublishVideoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PublishVideo not implemented")
+}
+func (UnimplementedVideoServiceServer) DeleteVideo(context.Context, *DeleteVideoRequest) (*DeleteVideoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteVideo not implemented")
 }
 func (UnimplementedVideoServiceServer) GetVideoList(context.Context, *GetVideoListRequest) (*GetVideoListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVideoList not implemented")
@@ -145,8 +179,8 @@ func (UnimplementedVideoServiceServer) GetVideoList(context.Context, *GetVideoLi
 func (UnimplementedVideoServiceServer) UpdateFavoriteCount(context.Context, *UpdateFavoriteCountReq) (*UpdateFavoriteCountRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateFavoriteCount not implemented")
 }
-func (UnimplementedVideoServiceServer) UpdateCommentCount(context.Context, *UpdateCommentCountReq) (*UpdateCommentCountRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateCommentCount not implemented")
+func (UnimplementedVideoServiceServer) GetVideoInfoBYVideoId(context.Context, *GetVideoInfoReq) (*GetVideoInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVideoInfoBYVideoId not implemented")
 }
 func (UnimplementedVideoServiceServer) mustEmbedUnimplementedVideoServiceServer() {}
 
@@ -197,6 +231,24 @@ func _VideoService_GetPublishVideoList_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VideoService_GetFavoriteVideoList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFavoriteVideoListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).GetFavoriteVideoList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoService_GetFavoriteVideoList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).GetFavoriteVideoList(ctx, req.(*GetFavoriteVideoListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _VideoService_PublishVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PublishVideoRequest)
 	if err := dec(in); err != nil {
@@ -211,6 +263,24 @@ func _VideoService_PublishVideo_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(VideoServiceServer).PublishVideo(ctx, req.(*PublishVideoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoService_DeleteVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteVideoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).DeleteVideo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoService_DeleteVideo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).DeleteVideo(ctx, req.(*DeleteVideoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -251,20 +321,20 @@ func _VideoService_UpdateFavoriteCount_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VideoService_UpdateCommentCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateCommentCountReq)
+func _VideoService_GetVideoInfoBYVideoId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVideoInfoReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VideoServiceServer).UpdateCommentCount(ctx, in)
+		return srv.(VideoServiceServer).GetVideoInfoBYVideoId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: VideoService_UpdateCommentCount_FullMethodName,
+		FullMethod: VideoService_GetVideoInfoBYVideoId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VideoServiceServer).UpdateCommentCount(ctx, req.(*UpdateCommentCountReq))
+		return srv.(VideoServiceServer).GetVideoInfoBYVideoId(ctx, req.(*GetVideoInfoReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -273,7 +343,7 @@ func _VideoService_UpdateCommentCount_Handler(srv interface{}, ctx context.Conte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var VideoService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "pb.VideoService",
+	ServiceName: "video.VideoService",
 	HandlerType: (*VideoServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -285,8 +355,16 @@ var VideoService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _VideoService_GetPublishVideoList_Handler,
 		},
 		{
+			MethodName: "GetFavoriteVideoList",
+			Handler:    _VideoService_GetFavoriteVideoList_Handler,
+		},
+		{
 			MethodName: "PublishVideo",
 			Handler:    _VideoService_PublishVideo_Handler,
+		},
+		{
+			MethodName: "DeleteVideo",
+			Handler:    _VideoService_DeleteVideo_Handler,
 		},
 		{
 			MethodName: "GetVideoList",
@@ -297,8 +375,8 @@ var VideoService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _VideoService_UpdateFavoriteCount_Handler,
 		},
 		{
-			MethodName: "UpdateCommentCount",
-			Handler:    _VideoService_UpdateCommentCount_Handler,
+			MethodName: "GetVideoInfoBYVideoId",
+			Handler:    _VideoService_GetVideoInfoBYVideoId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

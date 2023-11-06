@@ -44,10 +44,10 @@ type respType struct {
 			Timestamp time.Time `json:"@timestamp"`
 			Source    struct {
 				Timestamp   time.Time `json:"@timestamp"`
-				VideoId     string    `json:"video_id"`
+				VideoId     int64     `json:"video_id"`
 				Information string    `json:"information"`
 				UserName    string    `json:"user_name"`
-				UserId      string    `json:"user_id"`
+				UserId      int64     `json:"user_id"`
 			} `json:"_source"`
 		} `json:"hits"`
 	} `json:"hits"`
@@ -104,7 +104,7 @@ func (l *SearchLogic) Search(in *zinc.SearchRequest) (*zinc.SearchResponse, erro
 	n := len(respbody.Hits.Hits)
 	for i := 0; i < n; i++ {
 		index = append(index, &zinc.Index{UserId: respbody.Hits.Hits[i].Source.UserId,
-			VideoId:     respbody.Hits.Hits[i].Source.VideoId,
+			VideoId:     int64(respbody.Hits.Hits[i].Source.VideoId),
 			Information: respbody.Hits.Hits[i].Source.Information,
 			UserName:    respbody.Hits.Hits[i].Source.UserName,
 			Id:          respbody.Hits.Hits[i].Id},

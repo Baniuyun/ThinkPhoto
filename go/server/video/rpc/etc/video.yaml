@@ -1,18 +1,22 @@
 Name: video.rpc
-ListenOn: 127.0.0.1:8001
+ListenOn: 0.0.0.0:8001
 Etcd:
   Hosts:
-    - 127.0.0.1:2379
+    - 0.0.0.0:2379
+    #- 42.194.236.154:2379
   Key: video.rpc
 Mysql:
-  DataSource: root:root@tcp(127.0.0.1:3306)/think_photo?charset=utf8mb4&parseTime=True&loc=Local
+  DataSource: root:1234@tcp(127.0.0.1:3306)/think_photo?charset=utf8mb4&parseTime=True&loc=Local
 
 
 Qiniu:
-  addr: "http://s380i9zlc.hn-bkt.clouddn.com"
-  access_key_id: "bJ-9DVru_E4frpbc8H6TWwEbVcf5L0cPREoUYRuX"
-  secret_access_key: "ROfCruRQdhJzhAnaNgNIP3CJ-yrD38g4pFiVLER3"
-  video_buckets: thinkphoto11
-  video_path: "/root/video/"
+  Addr: "http://s380i9zlc.hn-bkt.clouddn.com"
+  AccesskeyID: "bJ-9DVru_E4frpbc8H6TWwEbVcf5L0cPREoUYRuX"
+  SecretAccessKey: "ROfCruRQdhJzhAnaNgNIP3CJ-yrD38g4pFiVLER3"
+  VideoBuckets: thinkphoto11
+  VideoPath: "/root/video/"
+
+Log:
+  Encoding: plain
 
 

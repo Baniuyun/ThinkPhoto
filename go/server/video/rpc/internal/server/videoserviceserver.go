@@ -4,16 +4,16 @@
 package server
 
 import (
-	"context"
-
 	"Thinkphoto/server/video/rpc/internal/logic"
 	"Thinkphoto/server/video/rpc/internal/svc"
-	"Thinkphoto/server/video/rpc/pb"
+	"Thinkphoto/server/video/rpc/pb/video"
+	"context"
+
 )
 
 type VideoServiceServer struct {
 	svcCtx *svc.ServiceContext
-	pb.UnimplementedVideoServiceServer
+	video.UnimplementedVideoServiceServer
 }
 
 func NewVideoServiceServer(svcCtx *svc.ServiceContext) *VideoServiceServer {
@@ -23,37 +23,49 @@ func NewVideoServiceServer(svcCtx *svc.ServiceContext) *VideoServiceServer {
 }
 
 // 获取上传回调凭证
-func (s *VideoServiceServer) GetPublishToken(ctx context.Context, in *pb.GetPublishTokenRequest) (*pb.GetPublishTokenResponse, error) {
+func (s *VideoServiceServer) GetPublishToken(ctx context.Context, in *video.GetPublishTokenRequest) (*video.GetPublishTokenResponse, error) {
 	l := logic.NewGetPublishTokenLogic(ctx, s.svcCtx)
 	return l.GetPublishToken(in)
 }
 
 // 获取用户上传视频列表
-func (s *VideoServiceServer) GetPublishVideoList(ctx context.Context, in *pb.GetPublishVideoListRequest) (*pb.GetPublishVideoListResponse, error) {
+func (s *VideoServiceServer) GetPublishVideoList(ctx context.Context, in *video.GetPublishVideoListRequest) (*video.GetPublishVideoListResponse, error) {
 	l := logic.NewGetPublishVideoListLogic(ctx, s.svcCtx)
 	return l.GetPublishVideoList(in)
 }
 
+// 获取用户喜欢视频列表
+func (s *VideoServiceServer) GetFavoriteVideoList(ctx context.Context, in *video.GetFavoriteVideoListRequest) (*video.GetFavoriteVideoListResponse, error) {
+	l := logic.NewGetFavoriteVideoListLogic(ctx, s.svcCtx)
+	return l.GetFavoriteVideoList(in)
+}
+
 // 上传视频
-func (s *VideoServiceServer) PublishVideo(ctx context.Context, in *pb.PublishVideoRequest) (*pb.PublishVideoResponse, error) {
+func (s *VideoServiceServer) PublishVideo(ctx context.Context, in *video.PublishVideoRequest) (*video.PublishVideoResponse, error) {
 	l := logic.NewPublishVideoLogic(ctx, s.svcCtx)
 	return l.PublishVideo(in)
 }
 
+// 删除视频
+func (s *VideoServiceServer) DeleteVideo(ctx context.Context, in *video.DeleteVideoRequest) (*video.DeleteVideoResponse, error) {
+	l := logic.NewDeleteVideoLogic(ctx, s.svcCtx)
+	return l.DeleteVideo(in)
+}
+
 // 获取视频列表
-func (s *VideoServiceServer) GetVideoList(ctx context.Context, in *pb.GetVideoListRequest) (*pb.GetVideoListResponse, error) {
+func (s *VideoServiceServer) GetVideoList(ctx context.Context, in *video.GetVideoListRequest) (*video.GetVideoListResponse, error) {
 	l := logic.NewGetVideoListLogic(ctx, s.svcCtx)
 	return l.GetVideoList(in)
 }
 
-// 更新这个视频的获赞数
-func (s *VideoServiceServer) UpdateFavoriteCount(ctx context.Context, in *pb.UpdateFavoriteCountReq) (*pb.UpdateFavoriteCountRsp, error) {
+// 点赞并更新这个视频的获赞数
+func (s *VideoServiceServer) UpdateFavoriteCount(ctx context.Context, in *video.UpdateFavoriteCountReq) (*video.UpdateFavoriteCountRsp, error) {
 	l := logic.NewUpdateFavoriteCountLogic(ctx, s.svcCtx)
 	return l.UpdateFavoriteCount(in)
 }
 
-// 更新这个视频的评论数
-func (s *VideoServiceServer) UpdateCommentCount(ctx context.Context, in *pb.UpdateCommentCountReq) (*pb.UpdateCommentCountRsp, error) {
-	l := logic.NewUpdateCommentCountLogic(ctx, s.svcCtx)
-	return l.UpdateCommentCount(in)
+// 根据视频id获取视频信息
+func (s *VideoServiceServer) GetVideoInfoBYVideoId(ctx context.Context, in *video.GetVideoInfoReq) (*video.GetVideoInfoResp, error) {
+	l := logic.NewGetVideoInfoBYVideoIdLogic(ctx, s.svcCtx)
+	return l.GetVideoInfoBYVideoId(in)
 }

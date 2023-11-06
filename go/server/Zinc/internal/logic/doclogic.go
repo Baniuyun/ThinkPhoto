@@ -29,10 +29,10 @@ func NewDocLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DocLogic {
 
 func (l *DocLogic) Doc(in *zinc.Doc) (*zinc.Response, error) {
 	// todo: add your logic here and delete this line
-	requestbody := fmt.Sprintf(`{"video_id":"%s",
+	requestbody := fmt.Sprintf(`{"video_id": %d ,
 										"information":"%s",
 										"user_name":"%s",
-										"user_id":"%s"}`, in.VideoId, in.Information, in.UserName, in.UserId)
+										"user_id": %d }`, in.VideoId, in.Information, in.UserName, in.UserId)
 	url := fmt.Sprintf("%s/api/%s/_doc", l.svcCtx.Config.ZincSearch.Addr, l.svcCtx.Config.ZincSearch.Index)
 	req, err := http.NewRequest("POST", url, strings.NewReader(requestbody))
 	if err != nil {
