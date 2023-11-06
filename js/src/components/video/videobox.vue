@@ -1,12 +1,27 @@
 <script setup>
+const props=defineProps({
+    videoShortMessage:{
+        type:Object,
+        default:{
+            id: Number,
+            information:String,
+            cover_url:String,
+        }
+    }
+})
+
+
+const playVideo=()=>{
+    router.push({path:'/video',query:{id:props.videoShortMessage.id}})
+}
 
 </script>
 
 <template>
-   <div id="box">
-    <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
-     <div id="videoname">我是视频名字</div>
+   <div id="box" @click="playVideo" >
+       <img src="{{props.cover_url}}" alt="">
 
+     <div id="videoname">{{props.information}}</div>
    </div>
 </template>
 <style lang="scss" scoped>

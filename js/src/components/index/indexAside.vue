@@ -15,12 +15,12 @@ import {
 </script>
 
 <template>
-          <div class="aside_logo" style="height: 100px"></div>
+          <div class="aside_logo" >
+              <img src="@/assets/logo.png"  alt=""> <div>享看视频</div>
+          </div>
 <!--使用elementplus的menu生成侧边菜单栏，包括首页，推荐，我的，热门，体育，二次元，知识，娱乐，音乐-->
           <el-menu
-
              router>
-
 
            <el-menu-item index="home">
           <el-icon><House/></el-icon>
@@ -85,6 +85,32 @@ import {
 </template>
 
 <style lang="scss" scoped>
+    .aside_logo{
+          position: relative;
+        top:30px;
+        display: flex;
+        justify-content: center;
+         margin-bottom: 40px;
+
+        img{
+            width: 40px;
+            height: 40px;
+
+        }
+        div{
+            position: relative;
+            width: 80px;
+            font-size: 20px;
+            height: 40px;
+            line-height: 40px;
+            color: white;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+    }
+
+
     .el-menu
     {
          width:100%;

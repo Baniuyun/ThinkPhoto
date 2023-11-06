@@ -5,38 +5,35 @@ import Aside from "@/components/index/indexAside.vue";
 import SearchBox from "@/components/index/search.vue";
 import HeadMenu from "@/components/index/headMenu.vue";
 import {ref} from "vue";
-
+import Publish from "@/components/PublishDialog.vue";
 
 //登录对话框部分
 const RegisterDialog=ref(null)
-const changeVisible= ()=>{
+const changeRegisterVisible= ()=>{
     RegisterDialog.value.changeVisable();
 }
-
+//投稿对话框部分
+const PublishDialog=ref(null)
+const changePublishVisible= ()=>{
+    PublishDialog.value.changeVisible();
+}
 
 
 </script>
 
-
-
-
 <template id="body">
   <Register ref="RegisterDialog"></Register>
-
-
+    <Publish ref="PublishDialog"></Publish>
   <div class="common-layout">
     <el-container id="left">
         <el-aside>
      <Aside></Aside>
         </el-aside>
 
-
       <el-container id="right">
         <el-header id="head">
          <SearchBox> </SearchBox>
-
-             <HeadMenu @changeVisible="changeVisible"></HeadMenu>
-
+             <HeadMenu @changeRegisterVisible="changeRegisterVisible" @changePublishVisible="changePublishVisible"  ></HeadMenu>
         </el-header>
 
 
@@ -138,4 +135,5 @@ const changeVisible= ()=>{
 }
 
 }
+
 </style>

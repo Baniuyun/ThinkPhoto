@@ -5,8 +5,9 @@
 <template>
    <div id="usermenu">
       <el-menu>
-           <el-menu-item index="1">按点赞排序</el-menu-item>
-           <el-menu-item index="2">按时间排序</el-menu-item>
+           <el-menu-item index="1">作品</el-menu-item>
+           <el-menu-item index="2">喜欢</el-menu-item>
+           <el-menu-item index="3">收藏</el-menu-item>
 </el-menu>
    </div>
 </template>
