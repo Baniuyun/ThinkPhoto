@@ -25,7 +25,17 @@ func NewIsFollowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *IsFollow
 
 // 是否关注
 func (l *IsFollowLogic) IsFollow(in *pb.IsFollowRequest) (*pb.IsFollowResponse, error) {
-	// todo: add your logic here and delete this line
+	followerId := in.GetFollowerId()   // 关注者id
+	followingId := in.GetFollowingId() // 被关注者
 
-	return &pb.IsFollowResponse{}, nil
+	follow, err := l.svcCtx.TFollowModel.FindOneByFollowerIdFollowingId(context.Background(), followerId, followingId)
+
+	if err != nil {
+		logx.Errorf("find by follower_id and following_id fail:%v", err)
+		return nil, err
+	}
+
+	isFollow := follow.IsFollow
+
+	return &pb.IsFollowResponse{Res: isFollow == 1}, nil
 }

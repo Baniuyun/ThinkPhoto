@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"Thinkphoto/server/follow/follow"
 	"context"
 
 	"Thinkphoto/server/follow/internal/svc"
@@ -25,7 +26,27 @@ func NewFollowListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Follow
 
 // 关注列表
 func (l *FollowListLogic) FollowList(in *pb.FollowListRequest) (*pb.FollowListResponse, error) {
-	// todo: add your logic here and delete this line
+	followerId := in.GetFollowerId()
+	cursor := in.GetCursor()
+	pageSize := in.GetPageSize()
 
-	return &pb.FollowListResponse{}, nil
+	tFollowList, err := l.svcCtx.TFollowModel.FindFollowList(context.Background(), followerId, cursor, pageSize)
+	if err != nil {
+		logx.Errorf("FindFollowList fail:%v", err)
+		return nil, err
+	}
+
+	var followList []*follow.FollowItem
+
+	for i := 0; i < len(tFollowList); i++ {
+		followItem := &follow.FollowItem{
+			Id:         tFollowList[i].Id,
+			FollowerId: tFollowList[i].FollowerId,
+			FansCount:  tFollowList[i].FansCount,
+			CreateTime: tFollowList[i].CreateTime,
+		}
+		followList = append(followList, followItem)
+	}
+
+	return &pb.FollowListResponse{Items: followList, Cursor: cursor + 1, IsEnd: len(followList) >= int(pageSize), Id: followerId}, nil
 }

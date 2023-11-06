@@ -1,6 +1,8 @@
 Name: follow.rpc
-ListenOn: 0.0.0.0:8005
+ListenOn: 127.0.0.1:8003
 Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: follow.rpc
+Mysql:
+  DataSource: root:root@tcp(127.0.0.1:3306)/think_photo?charset=utf8mb4&parseTime=True&loc=Local

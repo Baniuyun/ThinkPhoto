@@ -25,7 +25,16 @@ func NewFansCountLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FansCou
 
 // 粉丝数
 func (l *FansCountLogic) FansCount(in *pb.FansCountRequest) (*pb.CountResponse, error) {
-	// todo: add your logic here and delete this line
+	userId := in.GetFollowingId() // 用户id
 
-	return &pb.CountResponse{}, nil
+	tFollowCount, err := l.svcCtx.TFollowCountModel.FindOneByUserId(context.Background(), userId)
+
+	if err != nil {
+		logx.Errorf("TFollowCount Get err:%v", err)
+		return nil, err
+	}
+
+	count := tFollowCount.FollowerCount // 粉丝数
+
+	return &pb.CountResponse{Count: count}, nil
 }

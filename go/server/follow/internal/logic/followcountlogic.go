@@ -25,7 +25,14 @@ func NewFollowCountLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Follo
 
 // 关注数
 func (l *FollowCountLogic) FollowCount(in *pb.FollowCountRequest) (*pb.CountResponse, error) {
-	// todo: add your logic here and delete this line
+	userId := in.GetFollowerId()
 
-	return &pb.CountResponse{}, nil
+	tFollowCount, err := l.svcCtx.TFollowCountModel.FindOneByUserId(context.Background(), userId)
+	if err != nil {
+		logx.Errorf("FollowCount get fail:%v", err)
+		return nil, err
+	}
+
+	count := tFollowCount.FollowingCount
+	return &pb.CountResponse{Count: count}, nil
 }
