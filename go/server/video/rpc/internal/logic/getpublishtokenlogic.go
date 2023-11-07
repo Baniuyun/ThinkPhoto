@@ -1,12 +1,13 @@
 package logic
 
 import (
+	"Thinkphoto/server/video/rpc/internal/svc"
+	"Thinkphoto/server/video/rpc/pb/video"
 	"context"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
+
 	"github.com/zeromicro/go-zero/core/logx"
-	"rpc/internal/svc"
-	"rpc/pb"
 )
 
 type GetPublishTokenLogic struct {
@@ -24,7 +25,8 @@ func NewGetPublishTokenLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 // 获取上传回调凭证
-func (l *GetPublishTokenLogic) GetPublishToken(in *pb.GetPublishTokenRequest) (*pb.GetPublishTokenResponse, error) {
+func (l *GetPublishTokenLogic) GetPublishToken(in *video.GetPublishTokenRequest) (*video.GetPublishTokenResponse, error) {
+	// todo: add your logic here and delete this line
 	putPolicy := storage.PutPolicy{
 		Scope:            in.Bucket,
 		CallbackURL:      in.CallbackURL,
@@ -33,5 +35,5 @@ func (l *GetPublishTokenLogic) GetPublishToken(in *pb.GetPublishTokenRequest) (*
 	}
 	mac := qbox.NewMac(in.AccessKey, in.SecretKey)
 	upToken := putPolicy.UploadToken(mac)
-	return &pb.GetPublishTokenResponse{Token: upToken}, nil
+	return &video.GetPublishTokenResponse{Token: upToken}, nil
 }

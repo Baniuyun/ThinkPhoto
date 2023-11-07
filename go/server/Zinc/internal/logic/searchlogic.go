@@ -1,6 +1,9 @@
 package logic
 
 import (
+	"Thinkphoto/server/Zinc/internal/code"
+	"Thinkphoto/server/Zinc/internal/svc"
+	"Thinkphoto/server/Zinc/pb/zinc"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -9,9 +12,6 @@ import (
 	"net/http"
 	"strings"
 	"time"
-
-	"Zinc/internal/svc"
-	"Zinc/pb/zinc"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -44,10 +44,10 @@ type respType struct {
 			Timestamp time.Time `json:"@timestamp"`
 			Source    struct {
 				Timestamp   time.Time `json:"@timestamp"`
-				VideoId     string    `json:"video_id"`
+				VideoId     int64     `json:"video_id"`
 				Information string    `json:"information"`
 				UserName    string    `json:"user_name"`
-				UserId      string    `json:"user_id"`
+				UserId      int64     `json:"user_id"`
 			} `json:"_source"`
 		} `json:"hits"`
 	} `json:"hits"`
@@ -63,6 +63,12 @@ func NewSearchLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SearchLogi
 
 func (l *SearchLogic) Search(in *zinc.SearchRequest) (*zinc.SearchResponse, error) {
 	// todo: add your logic here and delete this line
+	if in.Data == "" {
+		return nil, code.SearchDataEmpty
+	}
+	if in.SearchType == "" {
+		return nil, code.SearchTypeEmpty
+	}
 	query := fmt.Sprintf(`{
 		"search_type": "%s",
 			"query":
@@ -73,13 +79,15 @@ func (l *SearchLogic) Search(in *zinc.SearchRequest) (*zinc.SearchResponse, erro
 	url := fmt.Sprintf("%s/api/%s/_search", l.svcCtx.Config.ZincSearch.Addr, l.svcCtx.Config.ZincSearch.Index)
 	req, err := http.NewRequest("POST", url, strings.NewReader(query))
 	if err != nil {
-		log.Fatal("httprequest", err)
+		logx.Errorf("zinc Search ConstructHttp err:%v", err)
+		return nil, err
 	}
 	req.SetBasicAuth(l.svcCtx.Config.ZincSearch.UserName, l.svcCtx.Config.ZincSearch.Password)
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Fatal("resp", err)
+		logx.Errorf("zinc Search HttpRequest err:%v", err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 	log.Println(resp.StatusCode)
@@ -87,15 +95,16 @@ func (l *SearchLogic) Search(in *zinc.SearchRequest) (*zinc.SearchResponse, erro
 	body, err := io.ReadAll(resp.Body)
 	err = json.Unmarshal(body, &respbody)
 	if err != nil {
-		log.Fatal("unmarshal", err)
+		logx.Errorf("zinc Search json.Unmarshal err:%v", err)
+		return nil, err
 	}
-	fmt.Println(string(body))
+	//fmt.Println(string(body))
 	//fmt.Println(respbody)
 	var index = []*zinc.Index{}
 	n := len(respbody.Hits.Hits)
 	for i := 0; i < n; i++ {
 		index = append(index, &zinc.Index{UserId: respbody.Hits.Hits[i].Source.UserId,
-			VideoId:     respbody.Hits.Hits[i].Source.VideoId,
+			VideoId:     int64(respbody.Hits.Hits[i].Source.VideoId),
 			Information: respbody.Hits.Hits[i].Source.Information,
 			UserName:    respbody.Hits.Hits[i].Source.UserName,
 			Id:          respbody.Hits.Hits[i].Id},

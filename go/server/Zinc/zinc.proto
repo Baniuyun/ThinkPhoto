@@ -9,16 +9,16 @@ message searchRequest {
   string search_type=3;
 }
 
-message createDocRequest{
-  string data=1;
-}
+//message createDocRequest{
+//  string data=1;
+//}
 
 message deleteDocRequest{
   string information=1;
 }
 
 message updateDocRequest{
-  string video_id=2;
+  int64 video_id=2;
   doc data=1;
 }
 message Response {
@@ -31,17 +31,17 @@ message searchResponse{
 
 message index{
   string id=5;
-  string video_id=1;
+  int64 video_id=1;
   string information=2;
   string user_name=3;
-  string user_id=4;
+  int64 user_id=4;
 }
 
 message doc{
-  string video_id=1;
+  int64 video_id=1;
   string information=2;
   string user_name=3;
-  string user_id=4;
+  int64 user_id=4;
 }
 service ZincSearch {
   rpc Search(searchRequest) returns(searchResponse);

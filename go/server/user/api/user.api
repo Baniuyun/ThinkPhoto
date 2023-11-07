@@ -1,0 +1,107 @@
+syntax = "v1"
+
+@server (
+	prefix: /api/user
+	middleware :cors
+	jwt: Auth
+)
+service userapi{
+	@doc "getUserInfoByUserId"
+	@handler getVideoInfo
+	get /info (infoReq) returns(infoResp)
+
+	@doc "getUserFollowinglist"
+	@handler getFollowinglLst
+	get /followinglist (followinglistReq)	returns(followinglistResp)
+
+	@doc "getUserFollowerList"
+	@handler FollowerList
+	get /followerlist (followerlistReq) returns (followerlistResp)
+
+	@doc "publishAvatar"
+	@handler PublishAvatar
+	post /publishAvatar (publishAvatarReq) returns (publishAvatarResp)
+
+	@doc "follow"
+	@handler follow
+	post /follow (followReq) returns (followResp)
+
+	@doc "modifyname"
+	@handler name
+	post /name (nameReq) returns (nameResp)
+}
+
+type infoReq {
+	UserId int64 `json:"user_id"`
+}
+
+type infoResp {
+	// 头像地址
+	Avatar string `json:"avatar"`
+	// 粉丝数
+	FollowerCount int64 `json:"follower_count"`
+	// 关注数
+	FollowingCount int64 `json:"following_count"`
+	// 是否关注
+	IsFollow bool `json:"Is_follow"`
+	// 用户id
+	UserID int64 `json:"user_id"`
+	// 用户名
+	UserName string `json:"user_name"`
+}
+
+type followinglistReq {
+	UserID int64 `json:"user_id"`
+}
+
+type followinglistResp {
+	UserList []UserSimple `json:"user_list"`
+}
+
+type followerlistReq {
+	UserID int64 `json:"user_id"`
+}
+
+type followerlistResp {
+	UserList []UserSimple `json:"user_list"`
+}
+
+type publishAvatarReq {
+	Key    string `json:"key"`
+	UserID int64  `json:"user_id"`
+}
+
+type publishAvatarResp {
+	//UserID int64 `json:"user_id"`
+	Avatar string `json:"avatar"`
+}
+
+type followReq {
+	// 关注者
+	FollowerID int64 `json:"follower_id"`
+	// 被关注者
+	FollowingID int64 `json:"following_id"`
+	// 状态码
+	Status int64 `json:"status"`
+}
+
+type followResp {
+}
+
+type nameReq {
+	UserID   int64  `json:"user_id"`
+	UserName string `json:"user_name"`
+}
+
+type nameResp {
+}
+type UserSimple {
+	// 头像地址
+	Avatar string `json:"avatar"`
+	// 是否关注
+	IsFollow bool `json:"Is_follow"`
+	// 用户id
+	UserID int64 `json:"user_id"`
+	// 用户名
+	UserName string `json:"user_name"`
+}

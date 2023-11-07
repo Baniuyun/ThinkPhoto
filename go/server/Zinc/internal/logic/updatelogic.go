@@ -1,15 +1,15 @@
 package logic
 
 import (
+	"Thinkphoto/server/Zinc/internal/svc"
+	"Thinkphoto/server/Zinc/pb/zinc"
 	"context"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
-
-	"Zinc/internal/svc"
-	"Zinc/pb/zinc"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -31,26 +31,28 @@ func NewUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateLogi
 func (l *UpdateLogic) Update(in *zinc.UpdateDocRequest) (*zinc.Response, error) {
 	// todo: add your logic here and delete this line
 	ls := &SearchLogic{l.ctx, l.svcCtx, l.Logger}
-	searchin := &zinc.SearchRequest{SearchType: "match", Data: in.VideoId}
+	searchin := &zinc.SearchRequest{SearchType: "match", Data: strconv.FormatInt(in.VideoId, 10)}
 	searchresp, err := ls.Search(searchin)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	id := searchresp.SearchResp[0].Id
 	url := fmt.Sprintf("%s/api/%s/_update/%s", l.svcCtx.Config.ZincSearch.Addr, l.svcCtx.Config.ZincSearch.Index, id)
-	requestbody := fmt.Sprintf(`{"video_id":"%s",
+	requestbody := fmt.Sprintf(`{"video_id":"%d",
 										"information":"%s",
 										"user_name":"%s",
-										"user_id":"%s"}`, in.Data.VideoId, in.Data.Information, in.Data.UserName, in.Data.UserId)
+										"user_id":"%d"}`, in.Data.VideoId, in.Data.Information, in.Data.UserName, in.Data.UserId)
 	req, err := http.NewRequest("POST", url, strings.NewReader(requestbody))
 	if err != nil {
-		log.Println(err)
+		logx.Errorf("zinc Update ConstructHttp err:%v", err)
+		return nil, err
 	}
 	req.SetBasicAuth(l.svcCtx.Config.ZincSearch.UserName, l.svcCtx.Config.ZincSearch.Password)
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Println(err)
+		logx.Errorf("zinc Update HttpRequest err:%v", err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 	log.Println(resp.StatusCode)

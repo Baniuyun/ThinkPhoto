@@ -1,0 +1,166 @@
+syntax = "v1"
+
+type CommonResp {
+	//	Status  uint32 `json:"status"`
+	//	Message string `json:"message"`
+	//
+	// Total   int64  `json:"total"`
+}
+
+// Video
+type Video {
+	User          User   `json:"author"`         // 视频作者信息
+	CommentCount  int64  `json:"comment_count"`  // 视频的评论总数
+	CoverURL      string `json:"cover_url"`      // 视频封面地址
+	FavoriteCount int64  `json:"favorite_count"` // 视频的点赞总数
+	VideoId       int64  `json:"id"`             // 视频唯一标识
+	IsFavorite    bool   `json:"is_favorite"`    // true-已点赞，false-未点赞
+	PlayURL       string `json:"play_url"`       // 视频播放地址
+	Information   string `json:"information"`    // 视频简介
+	//CollectCount  int64  `json:"collect_count"`  //	收藏数
+}
+
+//简化视频信息
+type VideoSimple {
+	VideoId       int64  `json:"video_id"`
+	CoverURL      string `json:"cover_url"`      // 视频封面地址
+	FavoriteCount int64  `json:"favorite_count"` // 视频的点赞总数
+	Information   string `json:"information"`    // 视频简介
+}
+
+// 简化作者信息(小窗)
+type User {
+	UserId   int64  `json:"user_id"`   // 用户id
+	IsFollow bool   `json:"is_follow"` // true-已关注，false-未关注
+	UserName string `json:"user_name"` // 用户名称
+	Avator   string `json:"avator"`    //头像地址
+}
+
+type videoListReq {
+	UserId int64 `json:"user_id"`
+	Tag    int64 `json:"tag"`
+}
+
+type videoListResp {
+	CommonResp
+	VideoList []Video `json:"video_list"` // 视频列表
+}
+
+type publishVideoReq {
+	//Title string `json:"title"`
+	//Token string `json:"token"`
+	Information string `json:"information"`
+	Tag         int64  `json:"tag"`
+	UserId      int64  `json:"user_id"`
+	Username    string `json:"user_name"`
+	Avatar      string `json:"avatar"`
+	Key         string `json:"key"`
+}
+
+type publishVideoResp {
+	Video Video `json:"video"`
+}
+
+type publishTokenReq {
+}
+
+type publishTokenResp {
+	CommonResp
+	Token string `json:"token"`
+}
+
+type publishListReq {
+	UserId int64 `json:"user_id"`
+}
+
+type publishListResp {
+	CommonResp
+	VideoList []VideoSimple `json:"video_list"` // 用户发布的视频列表
+}
+
+type deleteVideoReq {
+	VideoId int64 `json:"video_id"`
+}
+
+type deleteVideoResp {
+	CommonResp
+}
+
+type favoriteVideoListReq {
+	UserId int64 `json:"user_id"`
+}
+
+type favoriteVideoListResp {
+	CommonResp
+	VideoList []VideoSimple `json:"video_list"` // 用户喜欢的视频列表
+}
+
+type favoriteReq {
+	UserId  int64 `json:"user_id"`
+	VideoId int64 `json:"video_id"`
+	Status  int64 `json:"status"`
+}
+
+type favoriteResp {
+	CommonResp
+}
+
+type infoReq {
+	VideoId int64 `json:"video_id"`
+}
+
+type infoResp {
+	Video Video `json:"video"`
+}
+
+type searchReq {
+	Word string `json:"word"`
+}
+
+type searchResp {
+	VideoList []VideoSimple `json:"video_list"`
+}
+service videoapi{
+	@handler getVideoList
+	get /api/video/list (videoListReq) returns (videoListResp)
+
+	@doc "publishvideo"
+	@handler publishVideo
+	post /api/video/publishvideo (publishVideoReq) returns (publishVideoResp)
+}
+
+@server (
+	prefix: /api/video
+	middleware :cors
+	jwt: Auth
+)
+service videoapi{
+	@doc "getVideoInfoByVideoId"
+	@handler getVideoInfo
+	get /info (infoReq) returns(infoResp)
+
+	@doc "search"
+	@handler searchVideo
+	get /search (searchReq)	returns(searchResp)
+
+	@doc "getPublishToken"
+	@handler PublishToken
+	get /publishtoken (publishTokenReq) returns (publishTokenResp)
+
+	@doc "getPublishList"
+	@handler publishList
+	get /publishlist (publishListReq) returns (publishListResp)
+
+	@doc "deleteVideo"
+	@handler deleteVideo
+	delete /publishvideo (deleteVideoReq) returns (deleteVideoResp)
+
+	@doc "getFavoriteList"
+	@handler favoriteList
+	get /favoritelist (favoriteVideoListReq) returns (favoriteVideoListResp)
+
+	@doc "favotite"
+	@handler favorite
+	post /favorite (favoriteReq) returns (favoriteResp)
+
+}

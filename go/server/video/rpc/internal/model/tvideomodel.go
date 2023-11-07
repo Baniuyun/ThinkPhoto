@@ -18,7 +18,8 @@ type (
 		FindListById(ctx context.Context, id int64) ([]*TVideo, error)
 		FindListByTag(ctx context.Context, tag int64) ([]*TVideo, error)
 		UpdateCommentCount(ctx context.Context, id int64) (int64, error)
-		UpdateFavoriteCount(ctx context.Context, id int64) (int64, error)
+		UpdateFavoriteCountByStatus(ctx context.Context, status, id int64) (int64, error)
+		FindListByAuthorId(ctx context.Context, id int64) ([]*TVideo, error)
 	}
 
 	customTVideoModel struct {
@@ -88,8 +89,13 @@ func (m *defaultTVideoModel) UpdateCommentCount(ctx context.Context, id int64) (
 	}
 }
 
-func (m *defaultTVideoModel) UpdateFavoriteCount(ctx context.Context, id int64) (int64, error) {
-	update := fmt.Sprintf("update %s set comment_count = favorite_count + 1 where `id` = ?", m.table)
+func (m *defaultTVideoModel) UpdateFavoriteCountByStatus(ctx context.Context, status, id int64) (int64, error) {
+	var update string
+	if status == 0 {
+		update = fmt.Sprintf("update %s set favorite_count = favorite_count + 1 where `id` = ?", m.table)
+	} else {
+		update = fmt.Sprintf("update %s set favorite_count = favorite_count - 1 where `id` = ?", m.table)
+	}
 	_, err := m.conn.ExecCtx(ctx, update, id)
 	switch err {
 	case nil:
@@ -98,5 +104,19 @@ func (m *defaultTVideoModel) UpdateFavoriteCount(ctx context.Context, id int64) 
 		return 0, ErrNotFound
 	default:
 		return 0, err
+	}
+}
+
+func (m *defaultTVideoModel) FindListByAuthorId(ctx context.Context, id int64) ([]*TVideo, error) {
+	query := fmt.Sprintf("select %s from %s where `author_id` = ?", tVideoRows, m.table)
+	var resp []*TVideo
+	err := m.conn.QueryRowsCtx(ctx, &resp, query, id)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
 	}
 }

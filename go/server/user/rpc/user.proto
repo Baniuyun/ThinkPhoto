@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package user;
+option go_package="./service";
+
+service User {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc FindById(FindByIdRequest) returns (FindByIdResponse);
+  rpc FindByUserName(FindByUserNameRequest) returns (FindByUserNameResponse);
+}
+
+message FindByUserNameRequest{
+  string username =1;
+}
+
+message FindByUserNameResponse{
+  int64 userId = 1;
+  string username = 2;
+  string nickname=3;
+  string avatar=4;//头像
+  string password =5 ;
+  string  salt  =6;
+}
+
+message RegisterRequest {
+  string username = 1;//账号
+  string password = 2;
+}
+
+message RegisterResponse {
+  int64 userId = 1;
+}
+
+message FindByIdRequest {
+  int64 userId = 1;
+}
+
+message FindByIdResponse {
+  int64 userId = 1;
+  string username = 2;
+  string nickname=3;
+  string avatar=4;//头像
+  string password =5 ;
+  string  salt  =6;
+}
