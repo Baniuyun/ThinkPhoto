@@ -4,39 +4,43 @@ import Register from "@/components/index/RegisterDialog.vue";
 import Aside from "@/components/index/indexAside.vue";
 import SearchBox from "@/components/index/search.vue";
 import HeadMenu from "@/components/index/headMenu.vue";
-import {ref} from "vue";
-
+import {ref,onMounted} from "vue";
+import Publish from "@/components/PublishDialog.vue";
+import {useUserStore} from "@/store/User";
+import VideoPlay from "@/components/player/VideoPlayer.vue";
+const userStore=useUserStore()
 
 //登录对话框部分
 const RegisterDialog=ref(null)
-const changeVisible= ()=>{
+const changeRegisterVisible= ()=>{
     RegisterDialog.value.changeVisable();
+}
+//投稿对话框部分
+const PublishDialog=ref(null)
+const changePublishVisible= ()=>{
+    PublishDialog.value.changeVisible();
 }
 
 
+onMounted(()=>{
+    userStore.updateUser()
+})
 
 </script>
 
-
-
-
 <template id="body">
   <Register ref="RegisterDialog"></Register>
-
-
+    <Publish ref="PublishDialog"></Publish>
   <div class="common-layout">
     <el-container id="left">
         <el-aside>
      <Aside></Aside>
         </el-aside>
 
-
       <el-container id="right">
         <el-header id="head">
          <SearchBox> </SearchBox>
-
-             <HeadMenu @changeVisible="changeVisible"></HeadMenu>
-
+             <HeadMenu @changeRegisterVisible="changeRegisterVisible" @changePublishVisible="changePublishVisible"  ></HeadMenu>
         </el-header>
 
 
@@ -52,8 +56,6 @@ const changeVisible= ()=>{
 
 
 <style lang="scss" scoped>
-
-
 
 .common-layout{
    text-align: center;
@@ -138,4 +140,5 @@ const changeVisible= ()=>{
 }
 
 }
+
 </style>

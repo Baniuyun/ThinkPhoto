@@ -1,13 +1,55 @@
 <script setup>
+import {ref} from "vue";
+import  EditDialog from "@/components/user/EditDialog.vue";
+import {useUserStore} from "@/store/User";
+const userStore = useUserStore()
+const isLogin=ref(false);
+const isFollow=ref(false);
+const isSelf=ref(false);
+const editDialog=ref(null);
+const EditMessage=()=>{
+    console.log("编辑资料");
+    changeEditVisible();
+
+}
+const Follow=()=>{
+    console.log("关注");
+}
+const UnFollow=()=>{
+    console.log("取消关注");
+}
+
+
+
+const changeEditVisible= ()=>{
+    editDialog.value.changeEditVisible();
+}
+
+
+
+
+
+const EditVisible=()=>{
+    return isSelf.value;
+}
+const FollowVisible=()=>{
+    return !isSelf.value&&!isFollow.value;
+}
+const UnFollowVisible=()=>{
+    return !isSelf.value&&isFollow.value;
+}
 
 </script>
 
 <template>
+    <EditDialog ref="editDialog"></EditDialog>
+
+
 <div id="head">
-    <el-avatar src="" id="avatar"></el-avatar>
+    <el-avatar src="@" id="avatar"></el-avatar>
     <div id="message">
       <div id="username">
-        我是用户名字
+          {{userStore.getUsername()}}
       </div>
 
 
@@ -17,6 +59,11 @@
         <div id="like">获赞</div>
       </div>
     </div>
+
+   <el-button class="bt" v-if=" true"  @click="changeEditVisible">编辑资料</el-button>
+    <el-button class="bt" v-if="false"  @click="Follow">关注</el-button>
+    <el-button   class="bt" v-if="false"  @click="UnFollow">取消关注</el-button>
+
   </div>
 </template>
 
@@ -65,5 +112,20 @@
     }
 
   }
+    .bt{
+        position: relative;
+        left: 50%;
+        top: 20px;
+        width: 100px;
+        height: 50px;
+        background-color: skyblue;
+        color: white;
+        line-height: 50px;
+        border: none;
+        border-radius: 15px;
+    }
+
+
+
 }
 </style>

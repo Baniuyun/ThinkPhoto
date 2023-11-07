@@ -1,9 +1,8 @@
 import { createRouter,createWebHistory} from "vue-router";
-
+import {useUserStore} from "@/store/User";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-      { path:'/contribute',component:()=>import('@/views/contribute.vue')},
       {
           path: '/',
           component: () => import('@/views/layout/layoutContainer.vue'),
@@ -19,13 +18,10 @@ const router = createRouter({
               {path: 'music', name: 'music', component: () => import('@/views/channel/music.vue')},
               {path: 'knowledge', name: 'knowledge', component: () => import('@/views/channel/knowledge.vue')},
               {path: 'cartoon', name: 'cartoon', component: () => import('@/views/channel/cartoon.vue')},
+              {path: 'search', name: 'search', component: () => import('@/views/search.vue')},
 
           ]
       },
-
-
-
   ]})
-
 
 export default router;

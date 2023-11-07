@@ -1,20 +1,40 @@
 <script setup>
 import { ref, computed } from 'vue';
-import  vidiebox from "@/components/video/videobox.vue";
 import Videobox from "@/components/video/videobox.vue";
-const numbers = ref([1, 2, 3, 4, 5]);
 const loading = ref(false);
 const noMore = ref(false);
+const canLoadMore = computed(() => !loading.value && !noMore.value);
+let videoRow=0
 
-const canLoadMore = computed(() => !loading.value && !noMore.value && numbers.value.length < 40);
+
+
+ const props = defineProps({
+     //获取视频信息的函数
+      getMoreVideoFunction: {
+        type: Function,
+        default: () => () => []
+      }
+    });
+//视频信息
+ const videoMessages = ref([])
+
+
+
 
 const loadMore = () => {
   if (canLoadMore.value) {
     // 模拟加载更多数据
-    const lastNumber = numbers.value[numbers.value.length - 1];
-    for (let i = 1; i <= 3; i++) {
-      numbers.value.push(lastNumber + i);
+    const lastVideoIndex = videoMessages.value.length
+    console.log(lastVideoIndex)
+    const moreVideo=props.getMoreVideoFunction();
+    console.log(moreVideo)
+    if(moreVideo){
+      for(let i=lastVideoIndex;i<moreVideo.length;i++){
+          videoMessages.value.push(moreVideo[i])
+          videoRow=Math.floor(videoMessages.value.length/5)+1
+      }
     }
+
   } else {
     stopLoad();
   }
@@ -29,17 +49,20 @@ const stopLoad = () => {
 
 <template>
   <div class="container" v-infinite-scroll="loadMore" infinite-scroll-distance="40px" :infinite-scroll-disabled="!canLoadMore">
-    <ul>
-      <li v-for="index in 8"><videobox v-for="index in 5"></videobox></li>
+    <ul v-if="videoMessages.length!==0">
+
+        <li v-for="index in videoRow" :key="index">
+            <Videobox v-for="item in videoMessages.slice((index-1)*5,index*5)"  :videoShortMessage="item"></Videobox>
+        </li>
     </ul>
-    <div class="loading" v-if="loading">加载中...</div>
-    <div class="nomore" v-if="noMore">暂无更多</div>
+    <div class="loading" v-if="canLoadMore.value">加载中...</div>
+    <div class="nomore" v-if="!canLoadMore.value">暂无更多</div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .container {
-  height: calc(100% - 270px);
+  height: 96%;
   overflow: auto;
   width: 100%;
   position: relative;
@@ -54,7 +77,7 @@ ul li{
 
 .loading, .nomore {
   position: relative;
-  bottom: 40px;
+  bottom: 10px;
   width: 100%;
   text-align: center;
   padding: 10px;
@@ -71,4 +94,5 @@ ul li{
   display: none;
 }
 </style>
+
 

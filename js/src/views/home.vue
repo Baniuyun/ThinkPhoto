@@ -1,78 +1,102 @@
 <script setup>
-import Video from "@/components/player/Video.vue";
+import VideoCarousel from "@/components/player/VideoCarousel.vue";
+import {reactive, ref} from "vue";
+import {onMounted} from "vue";
+import router from "@/router";
+import {getVideoInfoService} from "@/api/video";
 
-import { ref, onMounted } from "vue";
 
-const carouselRef = ref(null);
-const loop=ref(false);
-const VideoDown = () => {
-  if (carouselRef.value) {
-    carouselRef.value.next();
-  }
-};
+const videoMessage=ref({
+       id:1,
+            play_url:"https://stream7.iqilu.com/10339/upload_transcode/202002/18/20200218093206z8V1JuPlpe.mp4",
+            cover_url:"https://img.iqilu.com/data/attachment/forum/202002/18/111415j0q0q0q0q0q0q0q0.jpg",
+            title:"视频2",
+            favorite_count:0,
+            comment_count:0,
+            is_favorite:false,
+            information:"视频2的信息",
+            tags:["标签1","标签2"],
+            user_id:1,
+            is_follow:false,
+            user_name:"用户1",
+            avatar:"https://img.iqilu.com/data/attachment/forum/202002/18/111415j0q0q0q0q0q0q0q0.jpg",}
+)
 
-const VideoUp = () => {
-  if (carouselRef.value) {
-    carouselRef.value.prev();
-  }
-};
+const  videos= reactive([
+        {   id:1,
+            play_url:"https://stream7.iqilu.com/10339/upload_transcode/202002/18/20200218114723HDu3hhxqIT.mp4",
+            cover_url:"https://img.iqilu.com/data/attachment/forum/202002/18/111415j0q0q0q0q0q0q0q0.jpg",
+            title:"视频1",
+            favorite_count:0,
+            comment_count:0,
+            is_favorite:false,
+            information:"视频1的信息",
+            tags:["标签1","标签2"],
+            user_id:1,
+            is_follow:false,
+            user_name:"用户1",
+            avatar:"https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
+        },
 
+          {   id:1,
+           play_url:"https://stream7.iqilu.com/10339/upload_transcode/202002/18/20200218093206z8V1JuPlpe.mp4",
+            cover_url:"https://img.iqilu.com/data/attachment/forum/202002/18/111415j0q0q0q0q0q0q0q0.jpg",
+            title:"视频1",
+            favorite_count:0,
+            comment_count:0,
+            is_favorite:false,
+            information:"视频1的信息",
+            tags:["标签1","标签2"],
+            user_id:1,
+            is_follow:false,
+            user_name:"用户1",
+            avatar:"https://img.iqilu.com/data/attachment/forum/202002/18/111415j0q0q0q0q0q0q0q0.jpg",
+        },
+
+    {   id:1,
+    play_url:"https://stream7.iqilu.com/10339/article/202002/18/2fca1c77730e54c7b500573c2437003f.mp4",
+        cover_url:"https://img.iqilu.com/data/attachment/forum/202002/18/111415j0q0q0q0q0q0q0q0.jpg",
+        title:"视频1",
+        favorite_count:0,
+        comment_count:0,
+        is_favorite:false,
+        information:"视频1的信息",
+        tags:["标签1","标签2"],
+        user_id:1,
+        is_follow:false,
+        user_name:"用户1",
+        avatar:"https://img.iqilu.com/data/attachment/forum/202002/18/111415j0q0q0q0q0q0q0q0.jpg",
+    },
+])
+const getVideoInfo=async ()=>{
+    const res=await getVideoInfoService(videoMessage.id)
+    videoMessage.value=res.data
+}
+
+//在渲染完成后console你好
 onMounted(() => {
-  // 在全局监听键盘事件
-  window.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowDown") {
-      VideoDown();
-    } else if (event.key === "ArrowUp") {
-      VideoUp();
+    //获取 router中的参数
+    const videoId=router.currentRoute.value.query.playVideoId
+    if(videoId)
+    {
+        console.log("id为"+router.currentRoute.value.query.playVideoId)
+        videos.unshift(getVideoInfo(videoId))
     }
-  });
-  //鼠标滑轮滚动添加事件
-    window.addEventListener("mousewheel", (event) => {
-        if (event.wheelDelta < 0) {
-        VideoDown();
-        } else if (event.wheelDelta > 0) {
-        VideoUp();
-        }
-    });
-});
+    else {
+    }
 
-
-
+})
 
 
 
 
 </script>
 <template>
-
-  <el-carousel height="100%"
-               direction="vertical"
-               :autoplay="false"
-               ref="carouselRef"
-               loop="false"
-
-                    >
-
-    <el-carousel-item >
-        <Video></Video>
-    </el-carousel-item>
-      <el-carousel-item >
-          <Video></Video>
-      </el-carousel-item>
-      <el-carousel-item >
-          <Video></Video>
-      </el-carousel-item>
-      <el-carousel-item >
-          <Video></Video>
-      </el-carousel-item>
-
-  </el-carousel>
+<VideoCarousel  :videos="videos"></VideoCarousel>
 </template>
 
 <style>
- .el-carousel .el-carousel__button {
-    display: none;
-  }
+
 
 
 </style>

@@ -7,7 +7,7 @@ const route = useRoute();
 
 
 <template>
-    <router-view> </router-view>
+    <router-view></router-view>
 </template>
 
 
@@ -21,7 +21,9 @@ const route = useRoute();
         margin: 0;
         padding: 0;
     }
-
+    .el-message__wrapper {
+    z-index: 100; /* 设置一个足够高的 z-index 值 */
+}
 
 
 </style>

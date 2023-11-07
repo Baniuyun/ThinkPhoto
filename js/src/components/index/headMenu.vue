@@ -1,74 +1,36 @@
 <script setup>
-
+import {useUserStore} from "@/store/User";
 import {ChatRound, DocumentAdd, Money, Notification, User} from "@element-plus/icons-vue";
-const emit = defineEmits(["changeVisible"]);
-const loginDialoShow = () => {
-    emit("changeVisible");
+const emit = defineEmits(["changeRegisterVisible"]);
+const userStore = useUserStore();
+const loginDialogShow = () => {
+    emit("changeRegisterVisible");
+};
+const publishDialogShow = () => {
+    emit("changePublishVisible");
 };
 </script>
 
 <template>
 
             <div id="head-menu">
-               <el-dropdown>
-        <span class="head-menu-button" ><el-icon><Money/></el-icon>充值</span>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item>加油</el-dropdown-item>
-          <el-dropdown-item>华为</el-dropdown-item>
-          <el-dropdown-item>加油</el-dropdown-item>
-          <el-dropdown-item>中国</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-
-<!-- 通知下拉菜单栏     -->
-                <el-dropdown>
-    <span class="head-menu-button"><el-icon><Notification/></el-icon>通知</span>
-      <template #dropdown>
-        <el-dropdown-menu >
-          <el-dropdown-item>加油</el-dropdown-item>
-          <el-dropdown-item>华为</el-dropdown-item>
-          <el-dropdown-item>加油</el-dropdown-item>
-          <el-dropdown-item>中国</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-
-<!--  私信下拉菜单栏 -->
-          <el-dropdown>
-    <span class="head-menu-button"><el-icon><ChatRound/></el-icon>私信</span>
-      <template #dropdown>
-        <el-dropdown-menu >
-          <el-dropdown-item>加油</el-dropdown-item>
-          <el-dropdown-item>华为</el-dropdown-item>
-          <el-dropdown-item>加油</el-dropdown-item>
-          <el-dropdown-item>中国</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-<!-- 投稿-->
-         <el-dropdown>
-    <span class="head-menu-button"><el-icon><DocumentAdd/></el-icon>投稿</span>
-      <template #dropdown>
-        <el-dropdown-menu >
-          <el-dropdown-item>加油</el-dropdown-item>
-          <el-dropdown-item>华为</el-dropdown-item>
-          <el-dropdown-item>加油</el-dropdown-item>
-          <el-dropdown-item>中国</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-
-
-
-
-
-
-
-
-     <el-button type="primary" style="background-color: red;width:110px;height: 50px;text-align: center;line-height: 50px;font-size: 20px;" round    id="loginbutton"   @click="loginDialoShow">
+    <el-button class="head-menu-button" @click="publishDialogShow"><el-icon><DocumentAdd/></el-icon>投稿</el-button>
+     <el-button type="primary"  round    id="loginbutton"   @click="loginDialogShow" v-if="!userStore.isLogin()">
       <el-icon style="font-size: 30px"  > <User/></el-icon>登录</el-button>
+<!--      element下拉栏          -->
+        <el-dropdown v-if="userStore.isLogin()">
+          <span class="el-dropdown-link">
+             <el-avatar src="userStore.getAvatar"></el-avatar>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="userStore.loginOut()">
+                  退出登录
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
             </div>
 </template>
 
@@ -81,12 +43,14 @@ const loginDialoShow = () => {
     height: 50px;
     background-color: transparent;
     z-index: 2;
+    outline: none;
     .head-menu-button{
         margin-right: 20px;
         font-size: 20px;
         line-height: 50px;
         color: #ffffff;
         border: none;
+        background-color: transparent;
 
         .el-icon{
             position: relative;
@@ -102,6 +66,10 @@ const loginDialoShow = () => {
         line-height: 50px;
         color: #ffffff;
         border: none;
+       background-color: rgba(147,228,247,0.9);
+        width:110px;
+        height: 50px;
+        text-align: center;
     }
 }
 
