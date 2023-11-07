@@ -131,6 +131,7 @@ service videoapi{
 
 @server (
 	prefix: /api/video
+	middleware :cors
 	jwt: Auth
 )
 service videoapi{

@@ -1,5 +1,5 @@
 Name: zinc.rpc
-ListenOn: 0.0.0.0:8003
+ListenOn: 0.0.0.0:8004
 Etcd:
   Hosts:
     -  0.0.0.0:2379
