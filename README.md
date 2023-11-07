@@ -6,9 +6,15 @@
 
 Github 地址：https://github.com/Baniuyun/ThinkPhoto
 
+人员分工：见同级目录下 cn.md
+
+demo视频：放置于同级目录下 demo.mp4
+
 
 
 ### 项目架构
+
+http://s380i9zlc.hn-bkt.clouddn.com/root/picture/image-20231025153520061.png
 
 
 
@@ -48,6 +54,8 @@ ThinkPhoto
 ├─go
 ├─js
 ├─README.md
+├─cn.md
+├─demo.mp4
 ├─go.mod
 ```
 
@@ -55,22 +63,22 @@ ThinkPhoto
 
 ```bash
 js
-├─public
-├─src
-├─api
-├─assets
-├─components
-│  ├─channel
-│  ├─icons
-│  ├─index
-│  ├─player
-│  ├─search
-│  ├─user
-│  └─video
-├─router
-├─store
-├─utils
-└─views
+ ├─public
+ ├─src
+  ├─api
+  ├─assets
+  ├─components
+  │  ├─channel
+  │  ├─icons
+  │  ├─index
+  │  ├─player
+  │  ├─search
+  │  ├─user
+  │  └─video
+  ├─router
+  ├─store
+  ├─utils
+  └─views
 ```
 
 简略后端目录
