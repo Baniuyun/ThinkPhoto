@@ -115,10 +115,12 @@ const switchRegister = () => {
         await userRegisterService(registerForm.value.username,registerForm.value.password).then((res)=>{
                 userStore.setToken(res.data.token.access_token)
                 userStore.setUser_id(res.data.user_id)
+                userStore.updateUser()
             }
         )
          changeVisable()
          router.push({path: "/search"})
+
     }
 
 

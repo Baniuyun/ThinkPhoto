@@ -1,5 +1,5 @@
 import { createRouter,createWebHistory} from "vue-router";
-
+import {useUserStore} from "@/store/User";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -22,10 +22,6 @@ const router = createRouter({
 
           ]
       },
-
-
-
   ]})
-
 
 export default router;

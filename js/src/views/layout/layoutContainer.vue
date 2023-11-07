@@ -4,8 +4,11 @@ import Register from "@/components/index/RegisterDialog.vue";
 import Aside from "@/components/index/indexAside.vue";
 import SearchBox from "@/components/index/search.vue";
 import HeadMenu from "@/components/index/headMenu.vue";
-import {ref} from "vue";
+import {ref,onMounted} from "vue";
 import Publish from "@/components/PublishDialog.vue";
+import {useUserStore} from "@/store/User";
+import VideoPlay from "@/components/player/VideoPlayer.vue";
+const userStore=useUserStore()
 
 //登录对话框部分
 const RegisterDialog=ref(null)
@@ -18,6 +21,10 @@ const changePublishVisible= ()=>{
     PublishDialog.value.changeVisible();
 }
 
+
+onMounted(()=>{
+    userStore.updateUser()
+})
 
 </script>
 
@@ -49,8 +56,6 @@ const changePublishVisible= ()=>{
 
 
 <style lang="scss" scoped>
-
-
 
 .common-layout{
    text-align: center;

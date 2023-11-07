@@ -7,10 +7,9 @@ const router = useRouter([]);
 import {getPublishTokenService} from "@/api/video";
 import {useUserStore} from "@/store/User";
 const userStore = useUserStore();
-
 const test1 = async () => {
-    await getPublishTokenService().then((res)=>{
-        alert(res.data.token)
+    await userStore.updateUser().then(res=>{
+        console.log(res)
     })
 }
 

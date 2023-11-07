@@ -1,4 +1,4 @@
-import  request from '@/utils/request'
+import  request from '@/utils/userrequest'
 
 
 //修改头像
@@ -35,6 +35,16 @@ export const userLoginService = (user_name, password) =>{
     })
 }
 
+export const getUserInfoService = (user_id)=>{
+    return request({
+        url: '/api/user/info',
+        method: 'get',
+        data: {
+          'user_id': user_id
+        }
+
+    })
+}
 
 
 

@@ -1,7 +1,11 @@
-<script setup lang="ts">
+<script setup >
 import { ref } from 'vue';
 import { reactive } from 'vue';
 import { videoPlay } from 'vue3-video-play/lib/index';
+import {useUserStore} from "@/store/User";
+import {likeVideoService} from "@/api/video";
+const userStore = useUserStore()
+
 const player = ref(null);
  const props=defineProps({
      videoMessage:{
@@ -32,7 +36,7 @@ const options = reactive({
   autoPlay: false, //自动播放
   loop: true, //循环播放
   mirror: false, //镜像画面
-  ligthOff: false,  //关灯模式
+  lightOff: false,  //关灯模式
   volume: 1, //默认音量大小
   control: true, //是否显示控制器
   title: props.videoMessage.information, //视频名称
@@ -55,12 +59,36 @@ const pause = () => {
   player.value.pause();
 }
 
+const onPlay = () => {
+  console.log('播放')
+}
+const onPause = () => {
+  console.log('暂停')
+}
+
+const onTimeupdate = () => {
+  console.log('时间更新')
+}
+const onCanplay = () => {
+  console.log('可以播放')
+}
 
 
+const likeVideo=async ()=>{
+    console.log("喜欢")
+    await likeVideoService(userStore.getUserId(),props.videoMessage.id).then(
+        res=>{
+            console.log(res)
+        }
+    )
 
-
-
-
+}
+const collectVideo=()=>{
+    console.log("收藏")
+}
+const shareVideo=()=>{
+    console.log("分享")
+}
 
 
 

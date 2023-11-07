@@ -33,17 +33,23 @@ const summitForm  =async ()=>{
       await getPublishTokenService().then(res=>{
     const token = res.data.token
     console.log(token)
-    videoKey=generateRandomString()
+          videoKey=generateRandomString(32)
       const putExtra = {
-        fname: "",
-        params: {},
-        mimeType: ["video/mp4", "video/x-m4v", "video/*"],
+        customVars: {
+           "x:avatar": userStore.getAvatar(),
+            "x:user_name": userStore.getUsername(),
+            "x:tag":uploadForm.value.classification.toString(),
+            "x:information":uploadForm.value.information,
+            "x:user_id":userStore.getUserId().toString(),
+
+        },
     };
     const config = {
         useCdnDomain: true,
         region: qiniu.region.z0,
     };
-    const observable = qiniu.upload(videoFile.value, videoKey.value, token, putExtra, config);
+    console.log("key是"+videoKey)
+    const observable = qiniu.upload(videoFile.value, videoKey, token, putExtra, config);
     const observer = {
         next(res) {
             console.log(res)
@@ -52,14 +58,13 @@ const summitForm  =async ()=>{
             console.log(err)
         },
         complete(res) {
-            console.log("返回的key值是："+res.data.key)
-            console.log(res)
-            videoKey=res.data.key
+            ElMessage.success("上传成功");
+            changeVisible()
         },
     };
     const  subscription = observable.subscribe(observer);
 })
-     await   publishVideoService(videoKey,userStore.getAvatar(),uploadForm.value.classification.toString(),uploadForm.value.information,userStore.getUserId().toString(),userStore.getUsername())
+     /*await   publishVideoService(videoKey,userStore.getAvatar(),uploadForm.value.classification.toString(),uploadForm.value.information,userStore.getUserId().toString(),userStore.getUsername())
               .then(res=>{
                   console.log(res)
                   ElMessage.success("上传成功")
@@ -68,7 +73,7 @@ const summitForm  =async ()=>{
                   console.log(err)
                   ElMessage.error("上传失败")
               }
-        )
+        )*/
     }
 
 

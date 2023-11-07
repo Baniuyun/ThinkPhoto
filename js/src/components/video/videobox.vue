@@ -1,27 +1,32 @@
 <script setup>
+import router from "@/router";
+import {ref} from "vue";
 const props=defineProps({
     videoShortMessage:{
         type:Object,
         default:{
-            id: Number,
-            information:String,
-            cover_url:String,
+            video_id:null,
+            information:"视频信息未加载",
+            cover_url:"",
         }
     }
 })
 
 
-const playVideo=()=>{
-    router.push({path:'/video',query:{id:props.videoShortMessage.id}})
+
+const playVideo= ()=>{
+    console.log(props.videoShortMessage.video_id)
+    router.push({path:"/home", query:{playVideoId:props.videoShortMessage.video_id}})
 }
 
+const getVideoInformation =async ()=>{
+}
 </script>
 
 <template>
    <div id="box" @click="playVideo" >
-       <img src="{{props.cover_url}}" alt="">
-
-     <div id="videoname">{{props.information}}</div>
+       <img :src="props.videoShortMessage.cover_url" alt="" >
+     <div id="videoname">{{props.videoShortMessage.information}}</div>
    </div>
 </template>
 <style lang="scss" scoped>
@@ -50,7 +55,11 @@ const playVideo=()=>{
            transform: scale(1.02);
            background-color: rgba(255,192,203,0.2);
        }
-
-
+       #videoPlay{
+           position: absolute;
+           margin: auto auto;
+           width: 100vh;
+           height: 100vh;
+       }
 
 </style>
