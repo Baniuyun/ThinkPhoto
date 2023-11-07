@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
+	"time"
 )
 
 var _ TFollowModel = (*customTFollowModel)(nil)
@@ -72,15 +73,15 @@ func (m *defaultTFollowModel) FindFansList(ctx context.Context, followingId int6
 
 // 封装返回参数
 type TFollowItem struct {
-	Id         int64 `db:"id"`
-	FollowerId int64 `db:"following_id"`
-	FansCount  int64 `db:"follower_count"`
-	CreateTime int64 `db:"create_time"`
+	Id         int64     `db:"id"`
+	FollowerId int64     `db:"following_id"`
+	FansCount  int64     `db:"follower_count"`
+	CreateTime time.Time `db:"create_time"`
 }
 
 func (m *defaultTFollowModel) FindFollowList(ctx context.Context, followerId int64, cursor int64, pageSize int64) ([]*TFollowItem, error) {
 	// select `tf.id`, `tf.following_id`, `tf.create_time`, `tfc.follower_count` from `t_follow` tf left join `t_follow_count` tfc on `tf.following_id` = `tfc.user_id` order by `tf.create_time` desc limit ?, ?
-	query := fmt.Sprintf("select `tf.id` as `id`, `tf.following_id` as `following_id`, `tfc.follower_count` as `follower_count`, `tf.create_time` as `create_time` from `t_follow` tf left join `t_follow_count` tfc on `tf.following_id` = `tfc.user_id` where `tf.follower_id` = ? order by `tf.create_time` desc limit ?, ?")
+	query := fmt.Sprintf("select tf.id, tf.following_id, tfc.follower_count, tf.create_time from t_follow as tf left join t_follow_count as tfc on tf.following_id = tfc.user_id where tf.follower_id = ? order by tf.create_time desc limit ?, ?")
 	var resp []*TFollowItem
 
 	err := m.conn.QueryRowsCtx(ctx, &resp, query, followerId, (cursor-1)*pageSize, pageSize)

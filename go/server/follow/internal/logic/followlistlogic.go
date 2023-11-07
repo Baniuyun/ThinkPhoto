@@ -43,7 +43,7 @@ func (l *FollowListLogic) FollowList(in *pb.FollowListRequest) (*pb.FollowListRe
 			Id:         tFollowList[i].Id,
 			FollowerId: tFollowList[i].FollowerId,
 			FansCount:  tFollowList[i].FansCount,
-			CreateTime: tFollowList[i].CreateTime,
+			CreateTime: tFollowList[i].CreateTime.Unix(),
 		}
 		followList = append(followList, followItem)
 	}
