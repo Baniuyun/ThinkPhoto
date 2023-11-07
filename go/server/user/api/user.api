@@ -2,6 +2,7 @@ syntax = "v1"
 
 @server (
 	prefix: /api/user
+	middleware :cors
 	jwt: Auth
 )
 service userapi{

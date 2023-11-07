@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Thinkphoto/pkg/cors"
 	"flag"
 	"fmt"
 
@@ -21,6 +22,7 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 
 	server := rest.MustNewServer(c.RestConf)
+	server.Use(cors.NewCorsMiddleware().Handle)
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)

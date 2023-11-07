@@ -33,7 +33,7 @@ func (m *defaultTFollowCountModel) FollowCountWithSession(session sqlx.Session, 
 	followCountModel := m.withSession(session)
 
 	// 更新 关注者/取关者的 关注数
-	follower, err := followCountModel.FindOne(context.Background(), followerId)
+	follower, err := followCountModel.FindOneByUserId(context.Background(), followerId)
 	if err != nil {
 		logx.Errorf("t_follow_count select fail:%v", err)
 	}
@@ -50,7 +50,7 @@ func (m *defaultTFollowCountModel) FollowCountWithSession(session sqlx.Session, 
 	}
 
 	// 更新 被关注者/被取关者的 粉丝数
-	following, err := followCountModel.FindOne(context.Background(), followingId)
+	following, err := followCountModel.FindOneByUserId(context.Background(), followingId)
 	if err != nil {
 		logx.Errorf("t_follow_count select fail:%v", err)
 	}
